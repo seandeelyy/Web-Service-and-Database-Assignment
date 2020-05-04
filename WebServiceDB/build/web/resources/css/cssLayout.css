@@ -1,0 +1,153 @@
+
+#top {
+    font-size: 50px;
+    background-color: #1dbf73;
+    text-align: center;
+    color: white;
+}
+
+#bottom {
+    background-color: #1dbf73;
+}
+
+#bottom > p {
+    font-size: 6px;
+    color: #ffffff;
+    text-align: right;
+}
+
+#buttons_middle {
+    width: -webkit-fit-content;
+    margin-left: auto;
+    margin-right: auto;  
+}
+
+#left {
+    float: left;
+    background-color: #ece3a5;
+    padding: 5px;
+    width: 150px;
+}
+
+#right {
+    float: right;
+    background-color: #ece3a5;
+    padding: 5px;
+    width: 150px;
+}
+
+.center_content {
+    position: relative;
+    width: -webkit-fit-content;
+    background-color: #ebebeb;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center_content_container {
+    position: relative;
+    width: 70%;
+    background-color: #ebebeb;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.left_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin-left: 170px;
+}
+
+.right_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin: 0px 170px 0px 170px;
+}
+
+#top a:link, #top a:visited {
+  color: white;
+  font-weight : bold;
+  text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover  {
+  color: black;
+  font-weight : bold;
+  text-decoration : underline;
+}
+
+.field_width {
+    width: 300px;
+}
+
+.field_width > h:inputTextarea {
+    height: 500px;
+}
+
+#nav_container > ul{
+    list-style: none;
+    margin: 0;
+} 
+
+#nav_container > ul > li {
+    display: inline-block;
+    background-color: #1dbf73;
+    color: #ffffff;
+    margin: 0;
+    text-decoration: none;
+}
+
+#nav_container > ul > li > a {
+    display: inline-block;
+    padding: 5 15 5 15;
+    color: #ffffff;
+    margin: 0;
+    text-decoration: none;
+}
+
+#content {
+    min-height: 400px;
+}
+
+.row {
+    margin-top: 0;
+    vertical-align: top;
+    min-height: 40px;
+    padding: 10px 0 0 10px;
+    border-bottom: 1px solid black;
+}
+
+td {
+    vertical-align: top;
+    border: 1px solid;
+}
+
+#table_form {
+    border: 1px solid #ffffff;
+}
+
+.last-row, .row_p {
+    min-height: 40px;
+    padding-top: 10px;
+    padding: 10px 10px 0 10px;
+}
+
+.first {
+    background-color: #dddddd;
+}
+
+.max_width_c {
+    max-width: 60%;
+}
+
+.panelNoBorder, .panelNoBorder tr, .panelNoBorder td{
+border: hidden;
+border-color: white;
+}
+
+.name {
+    width: 255px;
+}
