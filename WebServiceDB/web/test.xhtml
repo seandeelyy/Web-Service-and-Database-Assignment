@@ -10,7 +10,25 @@
         <!--http://localhost:8080/RestExampleNew/faces/index.xhtml-->
         <h:form>
             <br>
-                <h:outputText value="Welcome Sean Deely!" /> 
+                <h:outputText value="Welcome Sean Deely!" />
+                <h:dataTable value="#{restClient.users}" var="simpleobject">
+                    <h:column>
+                        <div>
+                            UID                            
+                        </div>
+                        <div>
+                            Name                           
+                        </div>
+                    </h:column>
+                    <h:column>
+                        <div>
+                            #{simpleobject.id}                         
+                        </div>
+                        <div>
+                            #{simpleobject.name}                         
+                        </div>
+                    </h:column>
+                </h:dataTable>
             </br>
 	</h:form>
         
