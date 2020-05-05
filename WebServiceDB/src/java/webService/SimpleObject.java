@@ -15,39 +15,39 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SimpleObject {
 
-	private int id;
-	private String name;
+    private int id;
+    private String name;
 
-	public SimpleObject() {
-		
-	}
-	
-	public SimpleObject(int id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+    public SimpleObject() {
 
-	public int getId() {
-		return id;
-	}
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public SimpleObject(int id, String name) {
+            super();
+            this.id = id;
+            this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public int getId() {
+            return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(int id) {
+            this.id = id;
+    }
 
-	@Override
-	public String toString() {
-		return "SimpleObject [id=" + id + ", name=" + name + "]";
-	}
+    public String getName() {
+            return name;
+    }
+
+    public void setName(String name) {
+            this.name = name;
+    }
+
+    @Override
+    public String toString() {
+            return "SimpleObject [id=" + id + ", name=" + name + "]";
+    }
 
 	
 }
