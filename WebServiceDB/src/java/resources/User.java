@@ -41,6 +41,13 @@ public class User {
         this.surname = surname;
         this.utype = utype;
     }
+    
+    public User(String firstName, String surname, String utype) {
+        super();
+        this.firstName = firstName;
+        this.surname = surname;
+        this.utype = utype;
+    }
  
         
     /**
@@ -52,6 +59,8 @@ public class User {
         this.surname = u.surname;
         this.utype = u.utype;
     }
+    
+    
     
     /**
      * Get the value of userid
