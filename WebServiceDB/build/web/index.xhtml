@@ -8,12 +8,44 @@
     <ui:define name="content">
 
         <h1>Welcome User!</h1>
-
-        <!--http://localhost:8080/WebServiceDB/faces/index.xhtml-->
+        
         <h:form>
             <br>
             <center>
-                <h:commandButton value="Call Webservice" action="#{restClient.testGetUser()}" />
+                <h:commandButton value="Find All Users" action="#{restClient.testGetAllUsers()}" />
+            </center>
+            </br>
+	</h:form>
+        <!--http://localhost:8080/WebServiceDB/faces/index.xhtml-->
+        <h:form>
+            <h:inputText value="#{restClient.uid}"/>
+            <br>
+            <center>
+                <h:commandButton value="Find User" action="#{restClient.testGetUser()}" />
+            </center>
+            </br>
+	</h:form>
+        
+        <h:form>
+            <br>
+            <center>
+                <h:commandButton value="Add user" action="#{restClient.testAddUser()}" />
+            </center>
+            </br>
+	</h:form>
+        
+        <h:form>
+            <br>
+            <center>
+                <h:commandButton value="Edit user" action="#{restClient.testUpdateUser(1003, 'Provider')}" />
+            </center>
+            </br>
+	</h:form>
+        
+        <h:form>
+            <br>
+            <center>
+                <h:commandButton value="Delete user" action="#{restClient.testDeleteUser()}" />
             </center>
             </br>
 	</h:form>
