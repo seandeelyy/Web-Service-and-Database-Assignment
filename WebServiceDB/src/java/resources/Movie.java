@@ -1,0 +1,279 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package resources;
+
+import java.time.LocalDate;
+
+/**
+ *
+ * @author Sean
+ */
+public class Movie {
+    
+    private int movieID;
+    private String title;
+    private String description;
+    private int runTime;
+    private LocalDate releaseDate;
+    private int actorID;
+    private String firstName;
+    private String lastName;
+    private int directorID;
+    private int genreID;
+    private String genre;
+    
+    /**
+     * Default Constructor
+     */
+    public Movie() {
+    }
+
+    /**
+     * Creates a Movie object with given information
+     * @param movieID ID of movie
+     * @param title Title of movie
+     * @param description Movie description
+     * @param runTime Duration of movie in minutes
+     * @param releaseDate Date of movie release 
+     * @param actorID ID of actor
+     * @param firstName First name of actor or director
+     * @param lastName Last name of actor or director
+     * @param directorID ID of director
+     * @param genreID ID of genre
+     * @param genre Genre of movie
+     */
+    public Movie(int movieID, String title, String description, int runTime, 
+            LocalDate releaseDate, int actorID, String firstName, String lastName, 
+            int directorID, int genreID, String genre) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.runTime = runTime;
+        this.releaseDate = releaseDate;
+        this.actorID = actorID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.directorID = directorID;
+        this.genreID = genreID;
+        this.genre = genre;
+    }
+    
+    /**
+     * Copy Constructor
+     * @param m original movie object
+     */
+    public Movie(Movie m) {
+        this.movieID = m.movieID;
+        this.title = m.title;
+        this.description = m.description;
+        this.runTime = m.runTime;
+        this.releaseDate = m.releaseDate;
+        this.actorID = m.actorID;
+        this.firstName = m.firstName;
+        this.lastName = m.lastName;
+        this.directorID = m.directorID;
+        this.genreID = m.genreID;
+        this.genre = m.genre;
+    }
+
+    /**
+     * Get the value of movieID
+     * 
+     * @return the value of movieID 
+     */
+    public int getMovieID() {
+        return movieID;
+    }
+    
+    /**
+     * Set the value of movieID
+     * 
+     * @param movieID new value of movieID 
+     */
+    public void setMovieID(int movieID) {
+        this.movieID = movieID;
+    }
+
+    /**
+     * Get the value of title
+     * 
+     * @return the value of title 
+     */
+    public String getTitle() {
+        return title;
+    }
+    
+    /**
+     * Set the value of title
+     * 
+     * @param title new value of title 
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    /**
+     * Get the value of description
+     * 
+     * @return the value of description 
+     */
+    public String getDescription() {
+        return description;
+    }
+    
+    /**
+     * Set the value of description
+     * 
+     * @param description new value of description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
+    /**
+     * Get the value of runTime
+     * 
+     * @return the value of runTime
+     */
+    public int getRunTime() {
+        return runTime;
+    }
+    
+    /**
+     * Set the value of runTime
+     * 
+     * @param runTime new value of runTime 
+     */
+    public void setRunTime(int runTime) {
+        this.runTime = runTime;
+    }
+    
+    /**
+     * Get the value of releaseDate
+     * 
+     * @return the value of releaseDate 
+     */
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+    
+    /**
+     * Set the value of releaseDate
+     * 
+     * @param releaseDate new value of releaseDate 
+     */
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+    
+    /**
+     * Get the value of actorID
+     * 
+     * @return the value of actorID 
+     */
+    public int getActorID() {
+        return actorID;
+    }
+    
+    /**
+     * Set the value of actorID
+     * 
+     * @param actorID new value of actorID 
+     */
+    public void setActorID(int actorID) {
+        this.actorID = actorID;
+    }
+    
+    /**
+     * Get the value of firstName
+     * 
+     * @return the value of firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+    
+    /**
+     * Set the value of firstName
+     * 
+     * @param firstName new value of firstName 
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    /**
+     * Get the value of lastName
+     * 
+     * @return the value of lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+    
+    /**
+     * Set the value of lastName
+     * 
+     * @param lastName new value of lastName 
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    /**
+     * Get the value of directorID
+     * 
+     * @return the value of directorID
+     */
+    public int getDirectorID() {
+        return directorID;
+    }
+    
+    /**
+     * Set the value of directorID
+     * 
+     * @param directorID new value of directorID 
+     */
+    public void setDirectorID(int directorID) {
+        this.directorID = directorID;
+    }
+    
+    /**
+     * Get the value of genreID
+     * 
+     * @return the value of genreID
+     */
+    public int getGenreID() {
+        return genreID;
+    }
+    
+    /**
+     * Set the value of genreID
+     * 
+     * @param genreID new value of genreID 
+     */
+    public void setGenreID(int genreID) {
+        this.genreID = genreID;
+    }
+    
+    /**
+     * Get the value of genre
+     * 
+     * @return the value of genre
+     */
+    public String getGenre() {
+        return genre;
+    }
+    
+    /**
+     * Set the value of genre
+     * 
+     * @param genre new value of genre
+     */
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+}
