@@ -65,9 +65,9 @@ public class RestClient {
         Client client = ClientBuilder.newClient();
         
         Form form = new Form();
-        form.param("fname", "Ellen");
+        form.param("fname", "Sean");
         form.param("sname", "Deely");
-        form.param("type", "Admin");
+        form.param("type", "Freelancer");
       
         Response callResult = client
                 .target(REST_SERVICE_URL).request(MediaType.APPLICATION_XML)

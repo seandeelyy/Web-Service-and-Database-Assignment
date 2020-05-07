@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response;
 import resources.SimpleObject;
 import resources.User;
 import resources.GetUserDataFromDB;
+import resources.CreateTables;
 
 /**
  *
@@ -37,6 +38,8 @@ import resources.GetUserDataFromDB;
 public class RestService extends Application {
     
     GetUserDataFromDB userData = new GetUserDataFromDB();
+    CreateTables createTables = new CreateTables();
+    // http://localhost:8080/WebServiceDB/services/MyRestService/users
     
     @GET
     @Path("/users")
@@ -91,6 +94,29 @@ public class RestService extends Application {
     public String deleteUser(@PathParam("userid") int uid ) {
         userData.deleteUser(uid);
         return "";
-   }
+    }
+    
+    @POST
+    @Path("/tables")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response createTable() {
+        int status = 0;
+        
+        if (createTables.createActorsTable()) {
+            createTables.createDirectorsTable();
+            createTables.createGenresTable();
+            createTables.createMoviesTable();
+            createTables.createActors_MoviesTable();
+            System.out.println(Response.ok().build());
+             return Response.ok().build();
+        }
+        
+        else {
+            System.out.println(Response.noContent().build());
+             return Response.noContent().build();
+        }
+    }
+    
 
 }
