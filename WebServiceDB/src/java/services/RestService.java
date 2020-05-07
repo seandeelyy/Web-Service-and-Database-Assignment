@@ -28,6 +28,7 @@ import resources.SimpleObject;
 import resources.User;
 import resources.GetUserDataFromDB;
 import resources.CreateTables;
+import resources.FillTables;
 
 /**
  *
@@ -39,6 +40,8 @@ public class RestService extends Application {
     
     GetUserDataFromDB userData = new GetUserDataFromDB();
     CreateTables createTables = new CreateTables();
+    FillTables fillTables = new FillTables();
+    
     // http://localhost:8080/WebServiceDB/services/MyRestService/users
     
     @GET
@@ -104,9 +107,13 @@ public class RestService extends Application {
         int status = 0;
         
         if (createTables.createActorsTable()) {
+            fillTables.fillActorsTable();
             createTables.createDirectorsTable();
+            fillTables.fillDirectorsTable();
             createTables.createGenresTable();
+            fillTables.fillGenresTable();
             createTables.createMoviesTable();
+            fillTables.fillMoviesTable();
             createTables.createActors_MoviesTable();
             System.out.println(Response.ok().build());
              return Response.ok().build();

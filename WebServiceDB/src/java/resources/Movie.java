@@ -6,6 +6,7 @@
 package resources;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
@@ -59,6 +60,43 @@ public class Movie {
         this.directorID = directorID;
         this.genreID = genreID;
         this.genre = genre;
+    }
+    
+    /**
+     * Creates a Movie (actor) object with given information
+     * @param firstName First name of actor or director
+     * @param lastName Last name of actor or director
+     */
+    public Movie(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    /**
+     * Creates a Movie (genre) object with given information
+     * @param genre genre of the movie
+     */
+    public Movie(String genre) {
+        this.genre = genre;
+    }
+    
+    /**
+     * Creates a Movie (movie) object with given information
+     * @param title Title of movie
+     * @param description Movie description
+     * @param runTime Duration of movie in minutes
+     * @param releaseDate Date of movie release 
+     * @param directorID ID of director
+     * @param genreID ID of genre
+     */
+    public Movie(String title, String description, int runTime, 
+            LocalDate releaseDate, int directorID, int genreID) {
+        this.title = title;
+        this.description = description;
+        this.runTime = runTime;
+        this.releaseDate = releaseDate;
+        this.directorID = directorID;
+        this.genreID = genreID;
     }
     
     /**

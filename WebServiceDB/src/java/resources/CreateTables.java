@@ -6,9 +6,6 @@
 package resources;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  *
@@ -165,7 +162,7 @@ public class CreateTables {
             stmt.executeUpdate(sql);
             tableCreated = true;
             
-            System.out.println("Genres Table successfully created!");
+            System.out.println("Actors_Movies Table successfully created!");
 
             // deal with any potential exceptions
             // note: all resources are closed automatically - no need for finally
