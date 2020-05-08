@@ -47,7 +47,6 @@ public class CreateTables {
         return tableCreated;
     }
     
-    
     /**
      * Adds a Director table to the database
      * @return true if table was successfully created, false otherwise
@@ -78,7 +77,6 @@ public class CreateTables {
         return tableCreated;
     }
     
-    
     /**
      * Adds a Genre table to the database
      * @return true if table was successfully created, false otherwise
@@ -108,7 +106,6 @@ public class CreateTables {
         }
         return tableCreated;
     }
-    
     
     /**
      * Adds a Movie table to the database
@@ -142,7 +139,6 @@ public class CreateTables {
         }
         return tableCreated;
     }
-    
     
     /**
      * Adds a Actors_Movies (bridge) table to the database

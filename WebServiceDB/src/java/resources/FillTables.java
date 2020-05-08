@@ -22,9 +22,14 @@ public class FillTables {
     private static final String URL = "jdbc:derby://localhost:1527/myDB";
     private static final String USER = "app";
     private static final String PASSWD = "app";
-    
-    
+
+    /**
+     * Adds actors to the ACTORS table
+     * @return true if actors were sucessfully added, false otherwise
+     */
     public boolean fillActorsTable() {
+        
+        boolean actorsAdded = false;
         
         Movie[] actors = {
             new Movie("Tom", "Hardy"), new Movie("Leonardo", "DiCaprio"),
@@ -50,19 +55,24 @@ public class FillTables {
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
                     System.out.println(
-                            "Row for " + m + " has been added");
+                            "Row for " + m.getFirstName() + " " 
+                                    + m.getLastName() + " has been added");
                 }
-            }
-
+            } actorsAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
-        return true;
+        return actorsAdded;
     }
-    
-    
+
+    /**
+     * Adds directors to the DIRECTORS table
+     * @return true if directors were sucessfully added, false otherwise
+     */
     public boolean fillDirectorsTable() {
+        
+        boolean directorsAdded = false;
         
         Movie[] directors = {
             new Movie("Adam", "McKay"), new Movie("Christopher", "Nolan"),
@@ -88,19 +98,24 @@ public class FillTables {
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
                     System.out.println(
-                            "Row for " + m + " has been added");
+                            "Row for " + m.getFirstName() + " " 
+                                    + m.getLastName() + " has been added");
                 }
-            }
-
+            } directorsAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
-        return true;
+        return directorsAdded;
     }
     
-    
+    /**
+     * Adds genres to the GENRES table
+     * @return true if genres were sucessfully added, false otherwise
+     */
     public boolean fillGenresTable() {
+        
+        boolean genresAdded = false;
         
         Movie[] genres = {
             new Movie("Action"), new Movie("Sci-Fi"), new Movie("Adventure"), 
@@ -126,18 +141,23 @@ public class FillTables {
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
                     System.out.println(
-                            "Row for " + m + " has been added");
+                            "Row for " + m.getGenre() + " has been added");
                 }
-            }
-
+            } genresAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
-        return true;
+        return genresAdded;
     }
     
+    /**
+     * Adds movies to the MOVIES table
+     * @return true if movies were sucessfully added, false otherwise
+     */
     public boolean fillMoviesTable() {
+        
+        boolean moviesAdded = false;
         
         Movie[] movies = {
             new Movie("The Dark Knight", "When the menace known as the Joker "
@@ -192,15 +212,13 @@ public class FillTables {
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
                     System.out.println(
-                            "Row for " + m + " has been added");
+                            "Row for " + m.getTitle() + " has been added");
                 }
-            }
-
+            } moviesAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
-        return true;
-    }
-    
+        return moviesAdded;
+    } 
 }
