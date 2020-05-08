@@ -13,6 +13,7 @@ import javax.ws.rs.client.WebTarget;
 import resources.SimpleObject;
 import javax.ws.rs.core.GenericType;
 import resources.User;
+import resources.Movie;
 import java.util.ArrayList;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
@@ -27,8 +28,9 @@ import javax.ws.rs.core.Response;
 @ManagedBean
 public class RestClient {
     
-    private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/users";
+    private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/actors";
     private int uid;  
+    ArrayList<Movie> actors = new ArrayList<>();
     
     // Get list of all users
     // @GET
@@ -42,6 +44,20 @@ public class RestClient {
             System.out.println("ID:   " + u.getUid() + "\n\tName: " + u.getFirstName() + 
                     " " + u.getSurname() + "\n\tType: " + u.getUtype());
         }
+    }
+    
+    // Get list of all actors
+    // @GET
+    public String testGetAllActors(){
+        Client client = ClientBuilder.newClient();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        
+        actors = client.target(REST_SERVICE_URL).request().get(list);
+        return "test";
+    }
+    
+    public ArrayList<Movie> getActors() {
+        return actors;
     }
     
     
@@ -109,6 +125,7 @@ public class RestClient {
 
         return "test";
     }
+    
     
     
     public int getUid() {

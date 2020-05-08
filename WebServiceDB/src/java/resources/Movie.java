@@ -7,11 +7,13 @@ package resources;
 
 import java.time.LocalDate;
 import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Sean
  */
+@XmlRootElement
 public class Movie {
     
     private int movieID;
@@ -73,6 +75,18 @@ public class Movie {
     }
     
     /**
+     * Creates a Movie (actor) object with given information
+     * @param actorID ID of actor
+     * @param firstName First name of actor or director
+     * @param lastName Last name of actor or director
+     */
+    public Movie(int actorID, String firstName, String lastName) {
+        this.actorID = actorID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    /**
      * Creates a Movie (genre) object with given information
      * @param genre genre of the movie
      */
@@ -91,6 +105,29 @@ public class Movie {
      */
     public Movie(String title, String description, int runTime, 
             LocalDate releaseDate, int directorID, int genreID) {
+        this.title = title;
+        this.description = description;
+        this.runTime = runTime;
+        this.releaseDate = releaseDate;
+        this.directorID = directorID;
+        this.genreID = genreID;
+    }
+    
+    
+    // probably not needed
+    /**
+     * Creates a Movie (movie) object with given information
+     * @param movieID ID of movie
+     * @param title Title of movie
+     * @param description Movie description
+     * @param runTime Duration of movie in minutes
+     * @param releaseDate Date of movie release 
+     * @param directorID ID of director
+     * @param genreID ID of genre
+     */
+    public Movie(int movieID, String title, String description, int runTime, 
+            LocalDate releaseDate, int directorID, int genreID) {
+        this.movieID = movieID;
         this.title = title;
         this.description = description;
         this.runTime = runTime;
