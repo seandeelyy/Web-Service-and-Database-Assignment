@@ -8,11 +8,13 @@
     <ui:define name="content">
 
         <h1>Welcome User!</h1>
-        
+        <h:form>
+            <h:outputLink value="https://youtu.be/EXeTwQWrcwY" target="_blank">Watch Trailer!</h:outputLink>
+        </h:form>
         <h:form>
             <br>
             <center>
-                <h:commandButton value="Find All Users" action="#{restClient.testGetAllUsers()}" />
+                <h:commandButton value="Find All Actors" action="#{restClient.testGetAllActors()}" />
             </center>
             </br>
 	</h:form>

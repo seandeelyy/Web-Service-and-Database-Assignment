@@ -26,7 +26,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import resources.SimpleObject;
 import resources.User;
+import resources.Movie;
 import resources.GetUserDataFromDB;
+import resources.GetDataFromDB;
 import resources.CreateTables;
 import resources.FillTables;
 
@@ -39,6 +41,7 @@ import resources.FillTables;
 public class RestService extends Application {
     
     GetUserDataFromDB userData = new GetUserDataFromDB();
+    GetDataFromDB movieData = new GetDataFromDB();
     CreateTables createTables = new CreateTables();
     FillTables fillTables = new FillTables();
     
@@ -49,8 +52,7 @@ public class RestService extends Application {
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public ArrayList<User> getUsers() { 
        return userData.getAllUsers();
-    }
-    
+    }    
 
     @GET
     @Path("/users/{userid}")
@@ -104,26 +106,88 @@ public class RestService extends Application {
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response createTable() {
-        int status = 0;
         
-        if (createTables.createActorsTable()) {
-            fillTables.fillActorsTable();
-            createTables.createDirectorsTable();
-            fillTables.fillDirectorsTable();
-            createTables.createGenresTable();
-            fillTables.fillGenresTable();
-            createTables.createMoviesTable();
-            fillTables.fillMoviesTable();
-            createTables.createActors_MoviesTable();
+        if (createTables.createActorsTable() &&
+            fillTables.fillActorsTable() &&
+            createTables.createDirectorsTable() &&
+            fillTables.fillDirectorsTable() &&
+            createTables.createGenresTable() &&
+            fillTables.fillGenresTable() &&
+            createTables.createMoviesTable() &&
+            fillTables.fillMoviesTable() &&
+            createTables.createActors_MoviesTable()) {
+            
             System.out.println(Response.ok().build());
-             return Response.ok().build();
+            return Response.ok().build();
         }
-        
         else {
             System.out.println(Response.noContent().build());
              return Response.noContent().build();
         }
+    }  
+    
+    @GET
+    @Path("/movies")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getMovies() { 
+        ArrayList<Movie> movies = movieData.getAllMovies();
+        
+        for (Movie m : movies) {
+            System.out.println(m.getReleaseDate() + " " + m.getActorID()
+            + " " + m.getFirstName());
+        }
+        return movies;
     }
     
+    @GET
+    @Path("/actors")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getActors() { 
+        ArrayList<Movie> actors = movieData.getAllActors();
+        
+        for (Movie a : actors) {
+            System.out.println(a.getActorID() + ": " + a.getFirstName()
+            + " " + a.getLastName());
+        }
+        return actors;
+    }
+    
+    @GET
+    @Path("/actors/{actorname}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getActor(@PathParam("actorname") String actorname) { 
+       return movieData.getActorByName(actorname);
+    }
+    
+    @GET
+    @Path("/directors")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getDirectors() { 
+        ArrayList<Movie> directors = movieData.getAllDirectors();
+        
+        for (Movie d : directors) {
+            System.out.println(d.getDirectorID() + ": " + d.getFirstName()
+            + " " + d.getLastName());
+        }
+        return directors;
+    }
+    
+    @GET
+    @Path("/directors/{directorname}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getDirector(@PathParam("directorname") String directorname) { 
+       return movieData.getDirectorByName(directorname);
+    }
+    
+    @GET
+    @Path("/genres/{genre}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getGenre(@PathParam("genre") String genre) { 
+        ArrayList<Movie> movies = movieData.getMovieByGenre(genre);
+        for (Movie m: movies) {
+            System.out.println(m.getTitle());
+        }
+       return movieData.getMovieByGenre(genre);
+    }
 
 }
