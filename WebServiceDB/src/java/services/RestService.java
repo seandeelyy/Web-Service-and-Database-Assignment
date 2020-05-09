@@ -115,7 +115,8 @@ public class RestService extends Application {
             fillTables.fillGenresTable() &&
             createTables.createMoviesTable() &&
             fillTables.fillMoviesTable() &&
-            createTables.createActors_MoviesTable()) {
+            createTables.createActors_MoviesTable() &&
+            fillTables.fillActors_MoviesTable()) {
             
             System.out.println(Response.ok().build());
             return Response.ok().build();
@@ -155,8 +156,15 @@ public class RestService extends Application {
     @GET
     @Path("/actors/{actorname}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getActor(@PathParam("actorname") String actorname) { 
+    public ArrayList<Movie> getActorByName(@PathParam("actorname") String actorname) { 
        return movieData.getActorByName(actorname);
+    }
+    
+    @GET
+    @Path("/actor/{actorid}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Movie getActorByID(@PathParam("actorid") int actorid) { 
+       return movieData.getActorByID(actorid);
     }
     
     @GET
@@ -175,12 +183,19 @@ public class RestService extends Application {
     @GET
     @Path("/directors/{directorname}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getDirector(@PathParam("directorname") String directorname) { 
+    public ArrayList<Movie> getDirectorByName(@PathParam("directorname") String directorname) { 
        return movieData.getDirectorByName(directorname);
     }
     
     @GET
-    @Path("/genres/{genre}")
+    @Path("/director/{directorid}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Movie getDirectorByID(@PathParam("directorid") int directorid) { 
+       return movieData.getDirectorByID(directorid);
+    }
+    
+    @GET
+    @Path("/genre/{genre}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public ArrayList<Movie> getGenre(@PathParam("genre") String genre) { 
         ArrayList<Movie> movies = movieData.getMovieByGenre(genre);

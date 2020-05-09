@@ -7,28 +7,19 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
-        <h:form>
-            <br>
-                <h:outputText value="Welcome Sean Deely!" /><br></br>
-                <h:outputText value="#{restClient.uid}" />
-
-            </br>
-	</h:form>
         
         <h:form>
-            <h:dataTable value="#{restClient.movies}" var="movie"
-                         border='1' width='300' cellpadding="5">
+            <h:dataTable value="#{restClient.actors}" var="actor" class="center_content"
+                         border='1' width='600' cellpadding="5">
                 <h:column>
-                    <f:facet name='header'>Actor ID</f:facet>
-                        #{movie.release}
+                    <h:graphicImage name="#{actor.image}" library="images" width="100" height="100"
+                                    rendered="#{!empty actor.image}" />
+                    <h:graphicImage name="icon.png" library="images" width="100" height="100"
+                                    rendered="#{empty actor.image}" />
                 </h:column>
                 <h:column>
-                    <f:facet name='header'>First Name</f:facet>
-                        #{movie.firstName}
-                </h:column>
-                <h:column>
-                    <f:facet name='header'>Last Name</f:facet>
-                        #{movie.lastName}
+                    <div class="first row">#{actor.firstName} #{actor.lastName}</div>
+                    <div class="row">#{actor.actorID}</div>
                 </h:column>
             </h:dataTable>
         </h:form>

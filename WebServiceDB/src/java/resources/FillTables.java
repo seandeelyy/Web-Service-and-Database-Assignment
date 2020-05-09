@@ -32,14 +32,17 @@ public class FillTables {
         boolean actorsAdded = false;
         
         Movie[] actors = {
-            new Movie("Tom", "Hardy"), new Movie("Leonardo", "DiCaprio"),
-            new Movie("Michael", "Fassbender"), new Movie("Christian", "Bale"), 
-            new Movie("Heath", "Ledger"), new Movie("Will", "Ferrell") 
+            new Movie("Tom", "Hardy", "Tom Hardy.png"), 
+            new Movie("Leonardo", "DiCaprio", "Leonardo DiCaprio.png"),
+            new Movie("Michael", "Fassbender", "Michael Fassbender.png"), 
+            new Movie("Christian", "Bale", "Christian Bale.png"), 
+            new Movie("Heath", "Ledger", "Heath Ledger.png"), 
+            new Movie("Will", "Ferrell", "Will Ferrell.png") 
         }; 
         
         List<Movie> actorList = Arrays.asList(actors);
         
-        String sql = "INSERT INTO ACTORS(FIRSTNAME, LASTNAME) VALUES(?,?)";
+        String sql = "INSERT INTO ACTORS(FIRSTNAME, LASTNAME, IMAGE) VALUES(?,?,?)";
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -51,6 +54,7 @@ public class FillTables {
                 m = lit.next();
                 pstmt.setString(1, m.getFirstName());
                 pstmt.setString(2, m.getLastName());
+                pstmt.setString(3, m.getImage());
 
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
@@ -164,35 +168,35 @@ public class FillTables {
                     + "wreaks havoc and chaos on the people of Gotham, Batman "
                     + "must accept one of the greatest psychological and physical "
                     + "tests of his ability to fight injustice.", 152, 
-                    LocalDate.of(2008, 7, 18), 1001, 1),
+                    LocalDate.of(2008, 7, 18), "https://youtu.be/EXeTwQWrcwY", 1001, 1),
             new Movie("Prometheus", "Following clues to the origin of mankind, "
                     + "a team finds a structure on a distant moon, but they soon "
                     + "realize they are not alone.", 124, 
-                    LocalDate.of(2012, 6, 8), 1002, 3),
+                    LocalDate.of(2012, 6, 8), "https://youtu.be/34cEo0VhfGE", 1002, 3),
             new Movie("Alien: Covenant", "The crew of a colony ship, bound for "
                     + "a remote planet, discover an uncharted paradise with a "
                     + "threat beyond their imagination, and must attempt a "
                     + "harrowing escape.", 122, 
-                    LocalDate.of(2017, 5, 19), 1002, 2),
+                    LocalDate.of(2017, 5, 19), "https://youtu.be/svnAD0TApb8", 1002, 2),
             new Movie("Lawless", "Set in Depression-era Franklin County, Virginia, "
                     + "a trio of bootlegging brothers are threatened by a new "
                     + "special deputy and other authorities angling for a cut "
                     + "of their profits.", 116, 
-                    LocalDate.of(2012, 8, 29), 1003, 4),
+                    LocalDate.of(2012, 8, 29), "https://youtu.be/HibcC7w5l1g", 1003, 4),
             new Movie("The Revenant ", "A frontiersman on a fur trading expedition "
                     + "in the 1820s fights for survival after being mauled by a "
                     + "bear and left for dead by members of his own hunting team.", 
-                    156, LocalDate.of(2015, 1, 8), 1004, 1),
+                    156, LocalDate.of(2015, 1, 8), "https://youtu.be/LoebZZ8K5N0", 1004, 1),
             new Movie("Step Brothers", "Two aimless middle-aged losers still "
                     + "living at home are forced against their will to become "
                     + "roommates when their parents marry.", 98, 
-                    LocalDate.of(208, 7, 25), 1000, 5),
+                    LocalDate.of(2008, 7, 25), "https://youtu.be/CewglxElBK0", 1000, 5),
         }; 
         
         List<Movie> movieList = Arrays.asList(movies);
         
         String sql = "INSERT INTO MOVIES(TITLE, DESCRIPTION, RUNTIME, RELEASEDATE,"
-                + "DIRECTOR, GENRE) VALUES(?,?,?,?,?,?)";
+                + "TRAILER, DIRECTOR, GENRE) VALUES(?,?,?,?,?,?,?)";
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -206,8 +210,9 @@ public class FillTables {
                 pstmt.setString(2, m.getDescription());
                 pstmt.setInt(3, m.getRunTime());
                 pstmt.setDate(4, Date.valueOf(m.getReleaseDate().toString()));
-                pstmt.setInt(5, m.getDirectorID());
-                pstmt.setInt(6, m.getGenreID());
+                pstmt.setString(5, m.getTrailer());
+                pstmt.setInt(6, m.getDirectorID());
+                pstmt.setInt(7, m.getGenreID());
 
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
@@ -221,4 +226,47 @@ public class FillTables {
         }
         return moviesAdded;
     } 
+    
+    /**
+     * Adds actors and movies to the ACTORS_MOVIES table
+     * @return true if sucessfully added, false otherwise
+     */
+    public boolean fillActors_MoviesTable() {
+        
+        boolean Actors_MoviesAdded = false;
+        
+        Movie[] actors_movies = {
+            new Movie(1000, 1003), new Movie(1000, 1004), new Movie(1001, 1004),
+            new Movie(1002, 1001), new Movie(1001, 1002), new Movie(1003, 1000),
+            new Movie(1004, 1000), new Movie(1005, 1005)
+        }; 
+        
+        List<Movie> actor_movieList = Arrays.asList(actors_movies);
+        
+        String sql = "INSERT INTO ACTORS_MOVIES(ACTORID, MOVIEID) VALUES(?,?)";
+        
+        // use try with resource
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                PreparedStatement pstmt = connect.prepareStatement(sql);) {
+
+            ListIterator<Movie> lit = actor_movieList.listIterator();
+            Movie m;
+            while (lit.hasNext()) {
+                m = lit.next();
+                pstmt.setInt(1, m.getActorID());
+                pstmt.setInt(2, m.getMovieID());
+
+                // execute statement 
+                if (pstmt.executeUpdate() == 1) {
+                    System.out.println(
+                            "Row for ActorID: " + m.getActorID() + " & MovieID: " 
+                                    + m.getMovieID() + " has been added");
+                }
+            } Actors_MoviesAdded = true;
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return Actors_MoviesAdded;
+    }
 }

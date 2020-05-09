@@ -6,6 +6,7 @@
 package resources;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -22,13 +23,15 @@ public class Movie {
     private int runTime;
     private LocalDate releaseDate;
     private String release;             // java.lang.NoSuchMethodError: java.time.LocalDate.<init>()
+    private String trailer;
+    private String image;
     private int actorID;
     private String firstName;
     private String lastName;
     private int directorID;
     private int genreID;
     private String genre;
-    
+   
     /**
      * Default Constructor
      */
@@ -50,13 +53,14 @@ public class Movie {
      * @param genre Genre of movie
      */
     public Movie(int movieID, String title, String description, int runTime, 
-            LocalDate releaseDate, int actorID, String firstName, String lastName, 
-            int directorID, int genreID, String genre) {
+            LocalDate releaseDate, String trailer, int actorID, String firstName, 
+            String lastName, int directorID, int genreID, String genre) {
         this.movieID = movieID;
         this.title = title;
         this.description = description;
         this.runTime = runTime;
         this.releaseDate = releaseDate;
+        this.trailer = trailer;
         this.actorID = actorID;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,24 +71,28 @@ public class Movie {
     
     /**
      * Creates a Movie (actor) object with given information
-     * @param firstName First name of actor or director
-     * @param lastName Last name of actor or director
+     * @param firstName First name of actor
+     * @param lastName Last name of actor
+     * @param image picture of actor
      */
-    public Movie(String firstName, String lastName) {
+    public Movie(String firstName, String lastName, String image) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.image = image;
     }
     
     /**
      * Creates a Movie (actor) object with given information
      * @param actorID ID of actor
-     * @param firstName First name of actor or director
-     * @param lastName Last name of actor or director
+     * @param firstName First name of actor
+     * @param lastName Last name of actor
+     * @param image picture of actor
      */
-    public Movie(int actorID, String firstName, String lastName) {
+    public Movie(int actorID, String firstName, String lastName, String image) {
         this.actorID = actorID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.image = image;
     }
     
     /**
@@ -96,20 +104,44 @@ public class Movie {
     }
     
     /**
+     * Creates a Movie (director) object with given information
+     * @param directorID ID of actor
+     * @param firstName First name of actor or director
+     * @param lastName Last name of actor or director
+     */
+    public Movie(int directorID, String firstName, String lastName) {
+        this.directorID = directorID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    /**
+     * Creates a Movie (director) object with given information
+     * @param firstName First name of actor or director
+     * @param lastName Last name of actor or director
+     */
+    public Movie(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+    
+    /**
      * Creates a Movie (movie) object with given information
      * @param title Title of movie
      * @param description Movie description
      * @param runTime Duration of movie in minutes
      * @param releaseDate Date of movie release 
+     * @param trailer link to trailer
      * @param directorID ID of director
      * @param genreID ID of genre
      */
     public Movie(String title, String description, int runTime, 
-            LocalDate releaseDate, int directorID, int genreID) {
+            LocalDate releaseDate, String trailer, int directorID, int genreID) {
         this.title = title;
         this.description = description;
         this.runTime = runTime;
         this.releaseDate = releaseDate;
+        this.trailer = trailer;
         this.directorID = directorID;
         this.genreID = genreID;
     }
@@ -144,19 +176,31 @@ public class Movie {
      * @param title Title of movie
      * @param description Movie description
      * @param runTime Duration of movie in minutes
-     * @param release Date of movie release in String format 
+     * @param release Date of movie release in String format
+     * @param trailer link to trailer
      * @param directorID ID of director
      * @param genreID ID of genre
      */
     public Movie(int movieID, String title, String description, int runTime, 
-            String release, int directorID, int genreID) {
+            String release, String trailer, int directorID, int genreID) {
         this.movieID = movieID;
         this.title = title;
         this.description = description;
         this.runTime = runTime;
         this.release = release;
+        this.trailer = trailer;
         this.directorID = directorID;
         this.genreID = genreID;
+    }
+    
+    /**
+     * Creates a Movie (Actors_Movies) object with given information
+     * @param actorID ID of actor
+     * @param movieID ID of movie
+     */
+    public Movie(int actorID, int movieID) {
+        this.actorID = actorID;
+        this.movieID = movieID;
     }
     
     /**
@@ -265,6 +309,24 @@ public class Movie {
      */
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+    
+    /**
+     * Get the value of trailer
+     * 
+     * @return the value of trailer 
+     */
+    public String getTrailer() {
+        return trailer;
+    }
+    
+    /**
+     * Set the value of trailer
+     * 
+     * @param trailer new value of trailer 
+     */
+    public void setTrailer(String trailer) {
+        this.trailer = trailer;
     }
     
     /**
@@ -393,5 +455,21 @@ public class Movie {
         this.release = release;
     }
     
+    /**
+     * Get the value of image
+     * 
+     * @return the value of image
+     */
+    public String getImage() {
+        return image;
+    }
     
+    /**
+     * Set the value of image
+     * 
+     * @param image new value of image
+     */
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
