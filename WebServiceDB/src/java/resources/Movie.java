@@ -21,6 +21,7 @@ public class Movie {
     private String description;
     private int runTime;
     private LocalDate releaseDate;
+    private String release;             // java.lang.NoSuchMethodError: java.time.LocalDate.<init>()
     private int actorID;
     private String firstName;
     private String lastName;
@@ -132,6 +133,28 @@ public class Movie {
         this.description = description;
         this.runTime = runTime;
         this.releaseDate = releaseDate;
+        this.directorID = directorID;
+        this.genreID = genreID;
+    }
+    
+    // probably not needed
+    /**
+     * Creates a Movie (movie) object with given information
+     * @param movieID ID of movie
+     * @param title Title of movie
+     * @param description Movie description
+     * @param runTime Duration of movie in minutes
+     * @param release Date of movie release in String format 
+     * @param directorID ID of director
+     * @param genreID ID of genre
+     */
+    public Movie(int movieID, String title, String description, int runTime, 
+            String release, int directorID, int genreID) {
+        this.movieID = movieID;
+        this.title = title;
+        this.description = description;
+        this.runTime = runTime;
+        this.release = release;
         this.directorID = directorID;
         this.genreID = genreID;
     }
@@ -351,4 +374,24 @@ public class Movie {
     public void setGenre(String genre) {
         this.genre = genre;
     }
+    
+    /**
+     * Get the value of release
+     * 
+     * @return the value of release
+     */
+    public String getRelease() {
+        return release;
+    }
+
+    /**
+     * Set the value of release
+     * 
+     * @param release new value of release as a string
+     */
+    public void setRelease(String release) {
+        this.release = release;
+    }
+    
+    
 }
