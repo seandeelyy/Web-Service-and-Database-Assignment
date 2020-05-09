@@ -27,7 +27,7 @@ public class CreateTables {
         
         String sql = "CREATE TABLE ACTORS(ID INTEGER Primary Key "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "FIRSTNAME VARCHAR(30), LASTNAME VARCHAR(30))";
+                + "FIRSTNAME VARCHAR(50), LASTNAME VARCHAR(50), IMAGE VARCHAR(50))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -118,9 +118,9 @@ public class CreateTables {
         String sql = "CREATE TABLE MOVIES(ID INTEGER Primary Key "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
                 + "TITLE VARCHAR(255), DESCRIPTION VARCHAR(255), "
-                + "RUNTIME INTEGER, RELEASEDATE DATE, DIRECTOR INTEGER,"
-                + "GENRE INTEGER, FOREIGN KEY(DIRECTOR) REFERENCES DIRECTORS(ID),"
-                + "FOREIGN KEY(GENRE) REFERENCES GENRES(ID))";
+                + "RUNTIME INTEGER, RELEASEDATE DATE, TRAILER VARCHAR(50),"
+                + "DIRECTOR INTEGER, GENRE INTEGER, FOREIGN KEY(DIRECTOR) "
+                + "REFERENCES DIRECTORS(ID), FOREIGN KEY(GENRE) REFERENCES GENRES(ID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {

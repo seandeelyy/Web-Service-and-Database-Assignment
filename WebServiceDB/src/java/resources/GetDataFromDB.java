@@ -51,8 +51,8 @@ public class GetDataFromDB {
             while (result.next()) {
                 // get data out - note: index starts at 1 !!!!
                 movie = (new Movie(result.getInt(1), result.getString(2), 
-                        result.getString(3), result.getInt(4), result.getDate(5).toLocalDate(),
-                        result.getInt(6), result.getInt(7)));
+                        result.getString(3), result.getInt(4), result.getDate(5).toString(),
+                        result.getString(6), result.getInt(7), result.getInt(8)));
                 movieList.add(movie);
             }           
             // deal with any potential exceptions
@@ -119,7 +119,7 @@ public class GetDataFromDB {
             while (result.next()) {
                 // get data out - note: index starts at 1 !!!!
                 actor = (new Movie(result.getInt(1), result.getString(2), 
-                        result.getString(3)));
+                        result.getString(3), result.getString(4)));
                 actorList.add(actor);
             }           
             // deal with any potential exceptions
@@ -148,6 +148,21 @@ public class GetDataFromDB {
             }
         }
         return actorsFound;
+    }
+    
+    /**
+     * Get actor by id
+     * @param actorid id of actor to search
+     * @return actor matching id
+     */
+    public Movie getActorByID(int actorid) {
+        ArrayList<Movie> actorList = getAllActors();
+        for (Movie actor : actorList) {
+            if (actor.getActorID() == actorid) {
+                return actor;
+            }
+        }
+        return null;
     }
     
     /**
@@ -198,5 +213,20 @@ public class GetDataFromDB {
             }
         }
         return directorsFound;
+    }
+    
+    /**
+     * Get director by id
+     * @param directorid id of actor to search
+     * @return actor matching id
+     */
+    public Movie getDirectorByID(int directorid) {
+        ArrayList<Movie> directorList = getAllDirectors();
+        for (Movie director : directorList) {
+            if (director.getDirectorID() == directorid) {
+                return director;
+            }
+        }
+        return null;
     }
 }

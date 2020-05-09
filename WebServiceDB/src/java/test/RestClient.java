@@ -28,9 +28,11 @@ import javax.ws.rs.core.Response;
 @ManagedBean
 public class RestClient {
     
-    private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/actors";
+    private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/movies";
     private int uid;  
     ArrayList<Movie> actors = new ArrayList<>();
+    ArrayList<Movie> movies = new ArrayList<>();
+    ArrayList<Movie> directors = new ArrayList<>();
     
     // Get list of all users
     // @GET
@@ -52,12 +54,40 @@ public class RestClient {
         Client client = ClientBuilder.newClient();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
         
-        actors = client.target(REST_SERVICE_URL).request().get(list);
-        return "test";
+        actors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/actors").request().get(list);
+        return "allActors";
     }
     
     public ArrayList<Movie> getActors() {
         return actors;
+    }
+    
+    // Get list of all movies
+    // @GET
+    public String testGetAllMovies(){
+        Client client = ClientBuilder.newClient();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        
+        movies = client.target(REST_SERVICE_URL).request().get(list);
+        return "allMovies";
+    }
+    
+    public ArrayList<Movie> getMovies() {
+        return movies;
+    }
+    
+    // Get list of all directors
+    // @GET
+    public String testGetAllDirectors(){
+        Client client = ClientBuilder.newClient();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        
+        directors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/directors").request().get(list);
+        return "allDirectors";
+    }
+    
+    public ArrayList<Movie> getDirectors() {
+        return directors;
     }
     
     
