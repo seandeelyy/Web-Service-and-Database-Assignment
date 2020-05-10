@@ -20,7 +20,9 @@
                         </h:outputLink> 
                     </div>
                     <div class="row-desc">#{movie.description}</div>
-                    <div class="row">Director:#{movie.directorFullName}</div>
+                    <div class="row">Director:
+                        <h:commandLink value="#{movie.directorFullName}" action="index"/>
+                    </div>
                     <div class="row"> Actors: 
                         <ui:repeat value="#{movie.actorNames}" var="name">
                             <h:commandLink value="#{name}" action="index"/>
