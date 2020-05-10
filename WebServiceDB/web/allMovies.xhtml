@@ -4,7 +4,8 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <ui:define name="content">
         
@@ -19,7 +20,13 @@
                         </h:outputLink> 
                     </div>
                     <div class="row-desc">#{movie.description}</div>
-                    <div class="last-row">Director:#{movie.directorFullName}</div>
+                    <div class="row">Director:#{movie.directorFullName}</div>
+                    <div class="row"> Actors: 
+                        <ui:repeat value="#{movie.actorNames}" var="name">
+                            <h:commandLink value="#{name}" action="index"/>
+                            <h:outputText value=", " rendered="#{movie.actorNames[movie.actorNames.size() - 1] != name}"/>
+                        </ui:repeat> 
+                    </div>
                 </h:column>
             </h:dataTable>
         </h:form>

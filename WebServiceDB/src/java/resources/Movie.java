@@ -33,6 +33,7 @@ public class Movie {
     private String genre;
     private String runningTime;
     private String directorFullName;
+    private ArrayList<String> actorNames;
    
     /**
      * Default Constructor
@@ -184,7 +185,8 @@ public class Movie {
      * @param genre genre of movie
      */
     public Movie(int movieID, String title, String description, String runningTime, 
-            String release, String trailer, String directorFullName, String genre) {
+            String release, String trailer, String directorFullName, 
+            String genre, ArrayList<String> actorNames) {
         this.movieID = movieID;
         this.title = title;
         this.description = description;
@@ -193,6 +195,7 @@ public class Movie {
         this.trailer = trailer;
         this.directorFullName = directorFullName;
         this.genre = genre;
+        this.actorNames = actorNames;
     }
     
     /**
@@ -510,5 +513,15 @@ public class Movie {
     public void setDirectorFullName(String directorFullName) {
         this.directorFullName = directorFullName;
     }
+
+    public ArrayList<String> getActorNames() {
+        return actorNames;
+    }
+
+    public void setActorNames(ArrayList<String> actorNames) {
+        this.actorNames = actorNames;
+    }
+    
+    
     
 }

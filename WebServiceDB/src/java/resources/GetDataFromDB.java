@@ -25,11 +25,15 @@ public class GetDataFromDB {
     private static ArrayList<Movie> movieList = new ArrayList<>();
     private static ArrayList<Movie> actorList = new ArrayList<>();
     private static ArrayList<Movie> directorList = new ArrayList<>();
+    private static ArrayList<String> actorNames = new ArrayList<>();
+    private static ArrayList<Integer> actorIDs = new ArrayList<>();
     private Movie movie;
     private Movie actor;
     private Movie director;
     private String genre;
     private String directorName;
+    private String actorName;
+    private int actorID;
     
     private static final String URL = "jdbc:derby://localhost:1527/myDB";
     private static final String USER = "app";
@@ -41,6 +45,7 @@ public class GetDataFromDB {
      */
     public ArrayList<Movie> getAllMovies() {
         movieList = new ArrayList<>();
+        
         String sql = "SELECT * FROM MOVIES";
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -55,7 +60,8 @@ public class GetDataFromDB {
                 movie = (new Movie(result.getInt(1), result.getString(2), 
                         result.getString(3), getRunTime(result.getInt(4)), 
                         result.getDate(5).toString(), result.getString(6), 
-                        getDirector(result.getInt(7)), getGenre(result.getInt(8))));
+                        getDirector(result.getInt(7)), getGenre(result.getInt(8)),
+                        getActorsInMovie(result.getInt(1))));
                 movieList.add(movie);
             }           
             // deal with any potential exceptions
@@ -214,7 +220,7 @@ public class GetDataFromDB {
     /**
      * Get directors name
      * @param directorID ID to search for
-     * @return String representation of  name
+     * @return String representation of Full Name
      */
     public String getDirector(int directorID) {
         directorName  = "";
@@ -271,9 +277,79 @@ public class GetDataFromDB {
         return genre;        
     }
     
+    /**
+     * Converts the time in minutes (int) to a more readable String format
+     * @param t Duration of movie in minutes
+     * @return String represenation of run time.
+     */
     public String getRunTime(int t) {
         int hours = t / 60;
         int minutes = t % 60;
         return String.format("%dh %02dmin", hours, minutes );
+    }
+    
+    /**
+     * Creates a list of actor IDs from the 'ACTORS_MOVIES' bridge table so 
+     * that the details for each actor in each movie can be retrieved.
+     * @param movieID ID of movie
+     * @return A list of Strings, i.e, a list of actor names
+     */
+    public ArrayList<String> getActorsInMovie(int movieID) {
+        String sql = "SELECT ACTORID FROM ACTORS_MOVIES WHERE MOVIEID=" + 
+                Integer.toString(movieID);
+        actorIDs = new ArrayList<>();
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                actorID = result.getInt(1);
+                actorIDs.add(actorID);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return getActorNames(actorIDs);
+    }
+    
+    /**
+     * Uses the actor IDs obtained from the getActorsInMovie function (above) 
+     * to search the 'ACTORS' table and retrieve the name of each actor;
+     * @param actorIDs ID of each actor in bridge table 'ACTORS_MOVIES'.
+     * @return A list of Strings, i.e, a list of actor names
+     */
+    public ArrayList<String> getActorNames(ArrayList<Integer> actorIDs) {
+        actorNames = new ArrayList<>();
+        for (Integer actorID: actorIDs) {
+            String sql = "SELECT FIRSTNAME, LASTNAME FROM ACTORS WHERE ID=" + 
+                    Integer.toString(actorID);
+
+            try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                    Statement stmt = connect.createStatement();) {
+
+                // execute statement - note DB needs to perform full processing
+                // on calling executeQuery
+                ResultSet result = stmt.executeQuery(sql);
+
+                // while there are results
+                while (result.next()) {
+                    actorName = result.getString(1) + " " + result.getString(2);
+                    actorNames.add(actorName);
+                }           
+                // deal with any potential exceptions
+                // note: all resources are closed automatically - no need for finally
+            } catch (SQLException sqle) {
+                System.out.println("Message: " + sqle.getMessage());
+                System.out.println("Code: " + sqle.getSQLState());
+            }
+        }
+        return actorNames;
     }
 }
