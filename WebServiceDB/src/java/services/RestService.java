@@ -195,7 +195,7 @@ public class RestService extends Application {
     }
     
     @GET
-    @Path("/genre/{genre}")
+    @Path("movies/genre/{genre}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public ArrayList<Movie> getGenre(@PathParam("genre") String genre) { 
         ArrayList<Movie> movies = movieData.getMovieByGenre(genre);

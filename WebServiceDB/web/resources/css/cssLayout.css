@@ -126,13 +126,14 @@ td {
 }
 
 #table_form {
-    border: 1px solid #ffffff;
+    border: none;
 }
 
 .last-row, .row_p {
     min-height: 40px;
     padding-top: 10px;
     padding: 10px 10px 0 10px;
+    padding-bottom: 50px;
 }
 
 .first {
@@ -150,4 +151,12 @@ border-color: white;
 
 .name {
     width: 255px;
+}
+
+.odd-col{
+	border:0px solid #BBBBBB;
+}
+
+.even-col{
+	border:0px solid #BBBBBB;
 }

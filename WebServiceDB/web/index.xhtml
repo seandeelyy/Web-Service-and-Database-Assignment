@@ -31,10 +31,19 @@
 	</h:form>
         <!--http://localhost:8080/WebServiceDB/faces/index.xhtml-->
         <h:form>
-            <h:inputText value="#{restClient.uid}"/>
+            <center><h:inputText value="#{restClient.actorName}"/></center> 
             <br>
             <center>
-                <h:commandButton value="Find User" action="#{restClient.testGetUser()}" />
+                <h:commandButton value="Find Actor" action="#{restClient.testGetActor()}" />
+            </center>
+            </br>
+	</h:form>
+        
+        <h:form>
+            <center><h:inputText value="#{restClient.directorName}"/></center> 
+            <br>
+            <center>
+                <h:commandButton value="Find Director" action="#{restClient.testGetDirector()}" />
             </center>
             </br>
 	</h:form>

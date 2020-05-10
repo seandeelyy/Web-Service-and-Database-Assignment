@@ -60,7 +60,6 @@ public class GetDataFromDB {
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
-
         }
         return movieList;
     }
@@ -95,7 +94,6 @@ public class GetDataFromDB {
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
-
         }        
         return moviesFound;
     }
@@ -127,7 +125,6 @@ public class GetDataFromDB {
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
-
         }
         return actorList;
     }

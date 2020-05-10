@@ -10,10 +10,16 @@
         
         <h:form>
             <h:dataTable value="#{restClient.directors}" var="director" class="center_content"
-                         border='1' width='600' cellpadding="5">
+                         width='600' cellspacing="10" columnClasses="odd-col,even-col">
+                <h:column >
+                    <h:graphicImage name="icon.png" library="images" width="150" height="150" />
+                </h:column>
                 <h:column>
-                    <div class="first row">#{director.firstName} #{director.lastName}</div>
+                    <div class="row"> 
+                        <h:commandLink value="#{director.firstName} #{director.lastName}" action="index"/> 
+                    </div>
                     <div class="row">#{director.directorID}</div>
+                    <div class="last-row">Movie 1, Movie 2, Movie 3, ...</div>
                 </h:column>
             </h:dataTable>
         </h:form>

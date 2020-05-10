@@ -29,7 +29,10 @@ import javax.ws.rs.core.Response;
 public class RestClient {
     
     private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/movies";
-    private int uid;  
+    private int uid;
+    private String actorName;
+    private String directorName;
+    
     ArrayList<Movie> actors = new ArrayList<>();
     ArrayList<Movie> movies = new ArrayList<>();
     ArrayList<Movie> directors = new ArrayList<>();
@@ -82,7 +85,8 @@ public class RestClient {
         Client client = ClientBuilder.newClient();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
         
-        directors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/directors").request().get(list);
+        directors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/directors")
+                .request().get(list);
         return "allDirectors";
     }
     
@@ -91,6 +95,39 @@ public class RestClient {
     }
     
     
+    // Get actor by name
+    // @GET
+    public String testGetActor(){
+        Client client = ClientBuilder.newClient();
+        actors = new ArrayList<>();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        actors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/actors")
+                .path("/{actorname}").resolveTemplate("actorname", actorName).request().get(list);
+      
+        for (Movie actor: actors) {
+            System.out.println("ID:   " +actor.getActorID() + "\n\tName: " + actor.getFirstName() + 
+            " " + actor.getLastName());
+        }
+        
+        return "allActors";
+    }
+    
+    // Get director by name
+    // @GET
+    public String testGetDirector(){
+        Client client = ClientBuilder.newClient();
+        directors = new ArrayList<>();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        directors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/directors")
+                .path("/{directorname}").resolveTemplate("directorname", directorName).request().get(list);
+      
+        for (Movie director: directors) {
+            System.out.println("ID:   " +director.getDirectorID() + "\n\tName: " + director.getFirstName() + 
+            " " + director.getLastName());
+        }
+        
+        return "allDirectors";
+    }
     
     // Get User by UID
     // @GET
@@ -165,4 +202,22 @@ public class RestClient {
     public void setUid(int uid) {
         this.uid = uid;
     }
+
+    public String getActorName() {
+        return actorName;
+    }
+
+    public void setActorName(String actorName) {
+        this.actorName = actorName;
+    }
+
+    public String getDirectorName() {
+        return directorName;
+    }
+
+    public void setDirectorName(String directorName) {
+        this.directorName = directorName;
+    }
+    
+    
 }
