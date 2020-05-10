@@ -237,7 +237,7 @@ public class FillTables {
         
         Movie[] actors_movies = {
             new Movie(1000, 1003), new Movie(1000, 1004), new Movie(1001, 1004),
-            new Movie(1002, 1001), new Movie(1001, 1002), new Movie(1003, 1000),
+            new Movie(1002, 1001), new Movie(1002, 1002), new Movie(1003, 1000),
             new Movie(1004, 1000), new Movie(1005, 1005)
         }; 
         
