@@ -22,7 +22,12 @@
                         <h:commandLink value="#{actor.firstName} #{actor.lastName}" action="index"/> 
                     </div>
                     <div class="row">#{actor.actorID}</div>
-                    <div class="last-row">Movie 1, Movie 2, Movie 3, ...</div>
+                    <div class="row"> Movies: 
+                        <ui:repeat value="#{actor.movieNames}" var="name">
+                            <h:commandLink value="#{name}" action="index"/>
+                            <h:outputText value=", " rendered="#{actor.movieNames[actor.movieNames.size() - 1] != name}"/>
+                        </ui:repeat> 
+                    </div>
                 </h:column>
             </h:dataTable>
         </h:form>

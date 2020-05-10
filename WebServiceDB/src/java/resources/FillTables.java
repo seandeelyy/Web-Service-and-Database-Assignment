@@ -183,7 +183,7 @@ public class FillTables {
                     + "special deputy and other authorities angling for a cut "
                     + "of their profits.", 116, 
                     LocalDate.of(2012, 8, 29), "https://youtu.be/HibcC7w5l1g", 1003, 4),
-            new Movie("The Revenant ", "A frontiersman on a fur trading expedition "
+            new Movie("The Revenant", "A frontiersman on a fur trading expedition "
                     + "in the 1820s fights for survival after being mauled by a "
                     + "bear and left for dead by members of his own hunting team.", 
                     156, LocalDate.of(2015, 1, 8), "https://youtu.be/LoebZZ8K5N0", 1004, 1),

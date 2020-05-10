@@ -26,14 +26,18 @@ public class GetDataFromDB {
     private static ArrayList<Movie> actorList = new ArrayList<>();
     private static ArrayList<Movie> directorList = new ArrayList<>();
     private static ArrayList<String> actorNames = new ArrayList<>();
+    private static ArrayList<String> movieNames = new ArrayList<>();
     private static ArrayList<Integer> actorIDs = new ArrayList<>();
+    private static ArrayList<Integer> movieIDs = new ArrayList<>();
     private Movie movie;
     private Movie actor;
     private Movie director;
     private String genre;
     private String directorName;
     private String actorName;
+    private String movieName;
     private int actorID;
+    private int movieID;
     
     private static final String URL = "jdbc:derby://localhost:1527/myDB";
     private static final String USER = "app";
@@ -45,7 +49,6 @@ public class GetDataFromDB {
      */
     public ArrayList<Movie> getAllMovies() {
         movieList = new ArrayList<>();
-        
         String sql = "SELECT * FROM MOVIES";
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
@@ -108,7 +111,8 @@ public class GetDataFromDB {
             while (result.next()) {
                 // get data out - note: index starts at 1 !!!!
                 actor = (new Movie(result.getInt(1), result.getString(2), 
-                        result.getString(3), result.getString(4)));
+                        result.getString(3), result.getString(4),
+                        getMoviesFtActor(result.getInt(1))));
                 actorList.add(actor);
             }           
             // deal with any potential exceptions
@@ -351,5 +355,71 @@ public class GetDataFromDB {
             }
         }
         return actorNames;
+    }
+    
+    /**
+     * Creates a list of movie IDs from the 'ACTORS_MOVIES' bridge table so 
+     * that the movie titles can be retrieved from the 'MOVIES' table which 
+     * feature the actor with ID == actorID.
+     * @param actorID ID of actor 
+     * @return A list of Strings, i.e, a list of movie titles
+     */
+    public ArrayList<String> getMoviesFtActor(int actorID) {
+        String sql = "SELECT MOVIEID FROM ACTORS_MOVIES WHERE ACTORID=" + 
+                Integer.toString(actorID);
+        movieIDs = new ArrayList<>();
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                movieID = result.getInt(1);
+                movieIDs.add(movieID);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return getMovieNames(movieIDs);
+    }
+    
+    /**
+     * Uses the movie IDs obtained from the getMoviesFtActor function (above) 
+     * to search the 'MOVIES' table and retrieve the title of each movie.
+     * @param movieIDs ID of each movie in bridge table 'ACTORS_MOVIES'.
+     * @return A list of Strings, i.e, a list of movie titles
+     */
+    public ArrayList<String> getMovieNames(ArrayList<Integer> movieIDs) {
+        movieNames = new ArrayList<>();
+        for (Integer movieID: movieIDs) {
+            String sql = "SELECT TITLE FROM MOVIES WHERE ID=" + 
+                    Integer.toString(movieID);
+
+            try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                    Statement stmt = connect.createStatement();) {
+
+                // execute statement - note DB needs to perform full processing
+                // on calling executeQuery
+                ResultSet result = stmt.executeQuery(sql);
+
+                // while there are results
+                while (result.next()) {
+                    movieName = result.getString(1);
+                    movieNames.add(movieName);
+                }           
+                // deal with any potential exceptions
+                // note: all resources are closed automatically - no need for finally
+            } catch (SQLException sqle) {
+                System.out.println("Message: " + sqle.getMessage());
+                System.out.println("Code: " + sqle.getSQLState());
+            }
+        }
+        return movieNames;
     }
 }

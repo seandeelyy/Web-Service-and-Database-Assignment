@@ -34,6 +34,7 @@ public class Movie {
     private String runningTime;
     private String directorFullName;
     private ArrayList<String> actorNames;
+    private ArrayList<String> movieNames;
    
     /**
      * Default Constructor
@@ -91,11 +92,13 @@ public class Movie {
      * @param lastName Last name of actor
      * @param image picture of actor
      */
-    public Movie(int actorID, String firstName, String lastName, String image) {
+    public Movie(int actorID, String firstName, String lastName, 
+            String image, ArrayList<String> movieNames) {
         this.actorID = actorID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.image = image;
+        this.movieNames = movieNames;
     }
     
     /**
@@ -521,7 +524,14 @@ public class Movie {
     public void setActorNames(ArrayList<String> actorNames) {
         this.actorNames = actorNames;
     }
-    
-    
+
+    public ArrayList<String> getMovieNames() {
+        return movieNames;
+    }
+
+    public void setMovieNames(ArrayList<String> movieNames) {
+        this.movieNames = movieNames;
+    }
+
     
 }
