@@ -176,7 +176,7 @@ public class GetDataFromDB {
             while (result.next()) {
                 // get data out - note: index starts at 1 !!!!
                 director = (new Movie(result.getInt(1), result.getString(2), 
-                        result.getString(3)));
+                        result.getString(3), getMoviesFtDirector(result.getInt(1))));
                 directorList.add(director);
             }           
             // deal with any potential exceptions
@@ -419,6 +419,36 @@ public class GetDataFromDB {
                 System.out.println("Message: " + sqle.getMessage());
                 System.out.println("Code: " + sqle.getSQLState());
             }
+        }
+        return movieNames;
+    }
+    
+    /**
+     * Searches the 'MOVIES' table for any movies which match directorID
+     * @param directorID ID of director
+     * @return A list of Strings, i.e, a list of movie titles directed by directorID
+     */
+    public ArrayList<String> getMoviesFtDirector(int directorID) {
+        movieNames = new ArrayList<>();
+        String sql = "SELECT TITLE FROM MOVIES WHERE DIRECTOR=" + 
+                Integer.toString(directorID);
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                movieName = result.getString(1);
+                movieNames.add(movieName);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
         }
         return movieNames;
     }

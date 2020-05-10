@@ -91,6 +91,7 @@ public class Movie {
      * @param firstName First name of actor
      * @param lastName Last name of actor
      * @param image picture of actor
+     * @param movieNames Movies which actor has appeared in.
      */
     public Movie(int actorID, String firstName, String lastName, 
             String image, ArrayList<String> movieNames) {
@@ -114,11 +115,14 @@ public class Movie {
      * @param directorID ID of actor
      * @param firstName First name of actor or director
      * @param lastName Last name of actor or director
+     * @param movieNames Movies directed
      */
-    public Movie(int directorID, String firstName, String lastName) {
+    public Movie(int directorID, String firstName, String lastName,
+            ArrayList<String> movieNames) {
         this.directorID = directorID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.movieNames = movieNames;
     }
     
     /**
@@ -183,9 +187,10 @@ public class Movie {
      * @param description Movie description
      * @param runningTime Duration of movie as a String
      * @param release Date of movie release in String format
-     * @param trailer link to trailer
+     * @param trailer Link to trailer
      * @param directorFullName Full name of director
-     * @param genre genre of movie
+     * @param genre Genre of movie
+     * @param actorNames Names of actors which appeared in movie.
      */
     public Movie(int movieID, String title, String description, String runningTime, 
             String release, String trailer, String directorFullName, 
@@ -517,21 +522,39 @@ public class Movie {
         this.directorFullName = directorFullName;
     }
 
+    /**
+     * Get the value of actorNames
+     * 
+     * @return the value of actorNames
+     */
     public ArrayList<String> getActorNames() {
         return actorNames;
     }
-
+    
+    /**
+     * Set the value of actorNames
+     * 
+     * @param actorNames Names of actors
+     */
     public void setActorNames(ArrayList<String> actorNames) {
         this.actorNames = actorNames;
     }
-
+    
+    /**
+     * Get the value of movieNames
+     * 
+     * @return the value of movieNames
+     */
     public ArrayList<String> getMovieNames() {
         return movieNames;
     }
-
+    
+    /**
+     * Set the value of movieNames
+     * 
+     * @param movieNames Names of actors
+     */
     public void setMovieNames(ArrayList<String> movieNames) {
         this.movieNames = movieNames;
     }
-
-    
 }
