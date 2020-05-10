@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import resources.Movie;
@@ -27,6 +28,8 @@ public class GetDataFromDB {
     private Movie movie;
     private Movie actor;
     private Movie director;
+    private String genre;
+    private String directorName;
     
     private static final String URL = "jdbc:derby://localhost:1527/myDB";
     private static final String USER = "app";
@@ -39,7 +42,6 @@ public class GetDataFromDB {
     public ArrayList<Movie> getAllMovies() {
         movieList = new ArrayList<>();
         String sql = "SELECT * FROM MOVIES";
-        
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {
             
@@ -51,8 +53,9 @@ public class GetDataFromDB {
             while (result.next()) {
                 // get data out - note: index starts at 1 !!!!
                 movie = (new Movie(result.getInt(1), result.getString(2), 
-                        result.getString(3), result.getInt(4), result.getDate(5).toString(),
-                        result.getString(6), result.getInt(7), result.getInt(8)));
+                        result.getString(3), getRunTime(result.getInt(4)), 
+                        result.getDate(5).toString(), result.getString(6), 
+                        getDirector(result.getInt(7)), getGenre(result.getInt(8))));
                 movieList.add(movie);
             }           
             // deal with any potential exceptions
@@ -71,30 +74,12 @@ public class GetDataFromDB {
      */
     public ArrayList<Movie> getMovieByGenre(String genre) {
         ArrayList<Movie> moviesFound = new ArrayList<>();
-        ArrayList<Movie> movieList = getAllMovies();
-        int genreID = 0;
-        
-        String sql = "SELECT ID FROM GENRES WHERE GENRE='" + genre + "'";
-        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-                Statement stmt = connect.createStatement();) {
-            
-            // execute statement - note DB needs to perform full processing
-            // on calling executeQuery
-            ResultSet result = stmt.executeQuery(sql);
-            while (result.next()) {
-                genreID = result.getInt(1);
-            }   
-            for (Movie movie : movieList) {
-                if (movie.getGenreID() == genreID) {
-                    moviesFound.add(movie);
-                }
+        ArrayList<Movie> movieList = getAllMovies(); 
+        for (Movie movie : movieList) {
+            if (movie.getGenre().equals(genre)) {
+                moviesFound.add(movie);
             }
-            // deal with any potential exceptions
-            // note: all resources are closed automatically - no need for finally
-        } catch (SQLException sqle) {
-            System.out.println("Message: " + sqle.getMessage());
-            System.out.println("Code: " + sqle.getSQLState());
-        }        
+        }    
         return moviesFound;
     }
     
@@ -189,7 +174,6 @@ public class GetDataFromDB {
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
-
         }
         return directorList;
     }
@@ -225,5 +209,71 @@ public class GetDataFromDB {
             }
         }
         return null;
+    }
+    
+    /**
+     * Get directors name
+     * @param directorID ID to search for
+     * @return String representation of  name
+     */
+    public String getDirector(int directorID) {
+        directorName  = "";
+        String sql = "SELECT FIRSTNAME, LASTNAME FROM DIRECTORS WHERE ID=" + 
+                Integer.toString(directorID);
+        
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                directorName = result.getString(1) + " " + result.getString(2);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return directorName;        
+    }
+    
+    /**
+     * Get the String representation of genre
+     * @param genreID ID to search for
+     * @return String representation of genre
+     */
+    public String getGenre(int genreID) {
+        genre = "";
+        String sql = "SELECT GENRE FROM GENRES WHERE ID=" + 
+                Integer.toString(genreID);
+        
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                genre = result.getString(1);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return genre;        
+    }
+    
+    public String getRunTime(int t) {
+        int hours = t / 60;
+        int minutes = t % 60;
+        return String.format("%dh %02dmin", hours, minutes );
     }
 }

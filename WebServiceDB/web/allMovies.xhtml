@@ -13,12 +13,13 @@
                          border='1' width='600' cellpadding="5">
                 <h:column>
                     <div class="first row" style="font-size: 32px">#{movie.title}</div>
-                    <div class="row">#{movie.runTime} | #{movie.genreID} | #{movie.release} |
+                    <div class="row">#{movie.runningTime} | #{movie.genre} | #{movie.release} |
                         <h:outputLink value="#{movie.trailer}" 
                                       target="_blank">Watch Trailer!
-                        </h:outputLink> | #{movie.directorID}
+                        </h:outputLink> 
                     </div>
-                    <div class="last-row">#{movie.description}</div>
+                    <div class="row-desc">#{movie.description}</div>
+                    <div class="last-row">Director:#{movie.directorFullName}</div>
                 </h:column>
             </h:dataTable>
         </h:form>

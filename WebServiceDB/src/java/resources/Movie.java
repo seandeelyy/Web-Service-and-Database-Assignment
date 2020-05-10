@@ -31,6 +31,8 @@ public class Movie {
     private int directorID;
     private int genreID;
     private String genre;
+    private String runningTime;
+    private String directorFullName;
    
     /**
      * Default Constructor
@@ -175,22 +177,22 @@ public class Movie {
      * @param movieID ID of movie
      * @param title Title of movie
      * @param description Movie description
-     * @param runTime Duration of movie in minutes
+     * @param runningTime Duration of movie as a String
      * @param release Date of movie release in String format
      * @param trailer link to trailer
-     * @param directorID ID of director
-     * @param genreID ID of genre
+     * @param directorFullName Full name of director
+     * @param genre genre of movie
      */
-    public Movie(int movieID, String title, String description, int runTime, 
-            String release, String trailer, int directorID, int genreID) {
+    public Movie(int movieID, String title, String description, String runningTime, 
+            String release, String trailer, String directorFullName, String genre) {
         this.movieID = movieID;
         this.title = title;
         this.description = description;
-        this.runTime = runTime;
+        this.runningTime = runningTime;
         this.release = release;
         this.trailer = trailer;
-        this.directorID = directorID;
-        this.genreID = genreID;
+        this.directorFullName = directorFullName;
+        this.genre = genre;
     }
     
     /**
@@ -472,4 +474,41 @@ public class Movie {
     public void setImage(String image) {
         this.image = image;
     }
+    
+    /**
+     * Get the value of running time as String
+     * 
+     * @return the value of running time
+     */
+    public String getRunningTime() {
+        return runningTime;
+    }
+    
+    /**
+     * Set the value of running time
+     * 
+     * @param runningTime new value of runningTime
+     */
+    public void setRunningTime(String runningTime) {
+        this.runningTime = runningTime;
+    }
+    
+    /**
+     * Get the value of the directors full name
+     * 
+     * @return the value of directorFullName
+     */
+    public String getDirectorFullName() {
+        return directorFullName;
+    }
+    
+    /**
+     * Set the value of directorFullName
+     * 
+     * @param directorFullName Full name of director
+     */
+    public void setDirectorFullName(String directorFullName) {
+        this.directorFullName = directorFullName;
+    }
+    
 }

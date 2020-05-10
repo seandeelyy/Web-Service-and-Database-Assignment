@@ -31,6 +31,7 @@ public class RestClient {
     private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/movies";
     private int uid;
     private String actorName;
+    private String genre;
     private String directorName;
     
     ArrayList<Movie> actors = new ArrayList<>();
@@ -110,6 +111,18 @@ public class RestClient {
         }
         
         return "allActors";
+    }
+    
+    // Get movie(s) by genre
+    // @GET
+    public String testGetMovieByGenre(){
+        Client client = ClientBuilder.newClient();
+        movies = new ArrayList<>();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        movies = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/movies")
+                .path("genre/{genre}").resolveTemplate("genre", genre).request().get(list);
+        
+        return "allMovies";
     }
     
     // Get director by name
@@ -218,6 +231,13 @@ public class RestClient {
     public void setDirectorName(String directorName) {
         this.directorName = directorName;
     }
-    
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }  
     
 }
