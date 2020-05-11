@@ -43,6 +43,7 @@ public class FillTables {
         List<Movie> actorList = Arrays.asList(actors);
         
         String sql = "INSERT INTO ACTORS(FIRSTNAME, LASTNAME, IMAGE) VALUES(?,?,?)";
+        String sq2 = "INSERT INTO ACTORCREDENTIALS(EMAIL) VALUES(?)";
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -68,6 +69,49 @@ public class FillTables {
             System.out.println("Code: " + sqle.getSQLState());
         }
         return actorsAdded;
+    }
+    
+    /**
+     * Adds credentials to the ACTORCREDENTIALS table
+     * @return true if credentials were sucessfully added, false otherwise
+     */
+    public boolean fillActorCredentialsTable() {
+        
+        boolean credentialsAdded = false;
+        
+        Movie[] emails = {
+            new Movie("tomhardy@gmail.com"), new Movie("leonardodicaprio@gmail.com"), 
+            new Movie("michael_fassbender@hotmail.com"), 
+            new Movie("christianBale@yahoomail.com"), 
+            new Movie("heath_ledger@gmail.com"), 
+            new Movie("WillFerrel@studentmail.ul.ie"), 
+        }; 
+        
+        List<Movie> emailList = Arrays.asList(emails);
+        
+        String sql = "INSERT INTO ACTORCREDENTIALS(EMAIL) VALUES(?)";
+        
+        // use try with resource
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                PreparedStatement pstmt = connect.prepareStatement(sql);) {
+
+            ListIterator<Movie> lit = emailList.listIterator();
+            Movie m;
+            while (lit.hasNext()) {
+                m = lit.next();
+                pstmt.setString(1, m.getGenre());
+
+                // execute statement 
+                if (pstmt.executeUpdate() == 1) {
+                    System.out.println(
+                            "Row for " + m.getGenre() + " has been added");
+                }
+            } credentialsAdded = true;
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return credentialsAdded;
     }
 
     /**
