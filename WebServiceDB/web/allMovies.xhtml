@@ -21,11 +21,11 @@
                     </div>
                     <div class="row-desc">#{movie.description}</div>
                     <div class="row">Director:
-                        <h:commandLink value="#{movie.directorFullName}" action="index"/>
+                        <h:commandLink value="#{movie.directorFullName}" action="#{restClient.testGetDirector(movie.directorFullName, true)}"/>
                     </div>
                     <div class="row"> Actors: 
                         <ui:repeat value="#{movie.actorNames}" var="name">
-                            <h:commandLink value="#{name}" action="index"/>
+                            <h:commandLink value="#{name}" action="#{restClient.testGetActor(name, true)}"/>
                             <h:outputText value=", " rendered="#{movie.actorNames[movie.actorNames.size() - 1] != name}"/>
                         </ui:repeat> 
                     </div>

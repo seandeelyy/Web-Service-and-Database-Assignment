@@ -141,6 +141,13 @@ public class RestService extends Application {
     }
     
     @GET
+    @Path("/movies/{title}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getMovieByTitle(@PathParam("title") String title) { 
+       return movieData.getMovieByTitle(title);
+    }
+    
+    @GET
     @Path("/actors")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public ArrayList<Movie> getActors() { 
