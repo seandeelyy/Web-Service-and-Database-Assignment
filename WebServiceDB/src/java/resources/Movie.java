@@ -28,6 +28,7 @@ public class Movie {
     private int actorID;
     private String firstName;
     private String lastName;
+    private String email;
     private int directorID;
     private int genreID;
     private String genre;
@@ -123,6 +124,17 @@ public class Movie {
         this.firstName = firstName;
         this.lastName = lastName;
         this.movieNames = movieNames;
+    }
+    /**
+     * Creates a Movie (director) object with given information
+     * @param directorID ID of actor
+     * @param firstName First name of actor or director
+     * @param lastName Last name of actor or director
+     */
+    public Movie(int directorID, String firstName, String lastName) {
+        this.directorID = directorID;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
     
     /**
@@ -394,6 +406,24 @@ public class Movie {
      */
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+    
+    /**
+     * Get the value of email
+     * 
+     * @return the value of email
+     */
+    public String getEmail() {
+        return email;
+    }
+    
+    /**
+     * Set the value of email
+     * 
+     * @param email new value of email
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
     
     /**

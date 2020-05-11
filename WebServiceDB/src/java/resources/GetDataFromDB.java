@@ -466,6 +466,7 @@ public class GetDataFromDB {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
+        System.out.println(movieNames);
         return movieNames;
     }
 }

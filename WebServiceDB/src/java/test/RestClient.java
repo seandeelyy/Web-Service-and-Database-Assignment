@@ -173,7 +173,6 @@ public class RestClient {
             System.out.println(callResult.getStatus());
             tablesCreated = 2;
         }
-      
         return "index";
     }
     
@@ -222,6 +221,33 @@ public class RestClient {
 
         String callResult = client
                 .target(REST_SERVICE_URL).request(MediaType.APPLICATION_XML)
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
+                String.class);
+      
+        return "index";
+    }
+    
+    // Added a movie to the database
+    // @PUT
+    public String testAddMovie(String title, String description, int runTime,
+            int year, int month, int day, String trailer, String directorFirstName, 
+            String directorLastName, String genre){
+        Client client = ClientBuilder.newClient();
+        
+        Form form = new Form();
+        form.param("title", title);
+        form.param("description", description);
+        form.param("runTime", Integer.toString(runTime));
+        form.param("year", Integer.toString(year));
+        form.param("month", Integer.toString(month));
+        form.param("day", Integer.toString(day));
+        form.param("trailer", trailer);
+        form.param("directorFirstName", directorFirstName);
+        form.param("directorLastName", directorLastName);
+        form.param("genre", genre);
+
+        String callResult = client
+                .target("http://localhost:8080/WebServiceDB/services/MyRestService/test").request(MediaType.APPLICATION_XML)
                 .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
                 String.class);
       

@@ -29,6 +29,7 @@ import resources.User;
 import resources.Movie;
 import resources.GetUserDataFromDB;
 import resources.GetDataFromDB;
+import resources.InsertDataIntoDB;
 import resources.CreateTables;
 import resources.FillTables;
 
@@ -42,6 +43,7 @@ public class RestService extends Application {
     
     GetUserDataFromDB userData = new GetUserDataFromDB();
     GetDataFromDB movieData = new GetDataFromDB();
+    InsertDataIntoDB insertData = new InsertDataIntoDB();
     CreateTables createTables = new CreateTables();
     FillTables fillTables = new FillTables();
     
@@ -90,6 +92,27 @@ public class RestService extends Application {
         userData.editUser(uid, type);
         return "";
     }
+    
+    @PUT
+    @Path("/test")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public String addMovie(@FormParam("title") String title,
+            @FormParam("description") String description,
+            @FormParam("runTime") int runTime,
+            @FormParam("year") int year,
+            @FormParam("month") int month,
+            @FormParam("day") int day,
+            @FormParam("trailer") String trailer,
+            @FormParam("directorFirstName") String directorFirstName,
+            @FormParam("directorLastName") String directorLastName,
+            @FormParam("genre") String genre,
+            @Context HttpServletResponse servletResponse) throws IOException{
+        
+        insertData.fillMoviesTable(title, description, runTime, year, month, 
+                day, trailer, directorFirstName, directorLastName, genre);
+        return "";
+    }
    
    
     @DELETE
@@ -109,6 +132,8 @@ public class RestService extends Application {
         
         if (createTables.createActorsTable() &&
             fillTables.fillActorsTable() &&
+//            createTables.createActorCredentialsTable() &&
+//            fillTables.fillActorCredentialsTable() &&
             createTables.createDirectorsTable() &&
             fillTables.fillDirectorsTable() &&
             createTables.createGenresTable() &&
@@ -146,7 +171,7 @@ public class RestService extends Application {
     public ArrayList<Movie> getMovieByTitle(@PathParam("title") String title) { 
        return movieData.getMovieByTitle(title);
     }
-    
+
     @GET
     @Path("/actors")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })

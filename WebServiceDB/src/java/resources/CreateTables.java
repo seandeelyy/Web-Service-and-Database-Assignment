@@ -48,6 +48,35 @@ public class CreateTables {
     }
     
     /**
+     * Adds a ActorCredentials table to the database
+     * @return true if table was successfully created, false otherwise
+     */
+    public boolean createActorCredentialsTable() {
+        
+        boolean tableCreated = false;
+        
+        String sql = "CREATE TABLE ActorCredentials(ID INTEGER, "
+                + "EMAIL VARCHAR(50), FOREIGN KEY(ID) REFERENCES ACTORS(ID))";
+        // use try with resource
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+
+            // execute statement 
+            stmt.executeUpdate(sql);
+            tableCreated = true;
+            
+            System.out.println("ActorCredentials Table successfully created!");
+
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return tableCreated;
+    }
+    
+    /**
      * Adds a Director table to the database
      * @return true if table was successfully created, false otherwise
      */

@@ -11,10 +11,10 @@
         
         <h:form>
             <h:dataTable value="#{restClient.movies}" var="movie" class="center_content"
-                         border='1' width='600' cellpadding="5">
+                         border='1' width='600' cellpadding="5" rendered="#{not empty restClient.movies}">
                 <h:column>
                     <div class="first row" style="font-size: 32px">#{movie.title}</div>
-                    <div class="row">#{movie.runningTime} | #{movie.genre} | #{movie.release} |
+                    <div class="row">#{movie.runningTime} | <b>#{movie.genre} </b>| #{movie.release} |
                         <h:outputLink value="#{movie.trailer}" 
                                       target="_blank">Watch Trailer!
                         </h:outputLink> 
@@ -31,6 +31,11 @@
                     </div>
                 </h:column>
             </h:dataTable>
+            <br></br>
+            <center>
+                <h:outputText value="No movies exist for the #{restClient.genre} genre! Try again!" 
+                              rendered="#{empty restClient.movies}" />
+            </center>
         </h:form>
         
     </ui:define>
