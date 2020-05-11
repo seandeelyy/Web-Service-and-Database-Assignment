@@ -29,9 +29,11 @@ import javax.ws.rs.core.Response;
 public class RestClient {
     
     private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/movies";
+    private int tablesCreated;
     private int uid;
     private String actorName;
     private String genre;
+    private String movieTitle;
     private String directorName;
     
     ArrayList<Movie> actors = new ArrayList<>();
@@ -96,20 +98,15 @@ public class RestClient {
     }
     
     
-    // Get actor by name
+    // Get actor(s) by name
     // @GET
-    public String testGetActor(){
+    public String testGetActor(String passedActorName, boolean flag){
         Client client = ClientBuilder.newClient();
         actors = new ArrayList<>();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        if(flag) actorName = passedActorName;
         actors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/actors")
                 .path("/{actorname}").resolveTemplate("actorname", actorName).request().get(list);
-      
-        for (Movie actor: actors) {
-            System.out.println("ID:   " +actor.getActorID() + "\n\tName: " + actor.getFirstName() + 
-            " " + actor.getLastName());
-        }
-        
         return "allActors";
     }
     
@@ -125,12 +122,26 @@ public class RestClient {
         return "allMovies";
     }
     
+    // Get movie(s) by title
+    // @GET
+    public String testGetMovieByTitle(String passedMovieTitle, boolean flag){
+        Client client = ClientBuilder.newClient();
+        movies = new ArrayList<>();
+        GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        if(flag) movieTitle = passedMovieTitle;
+        movies = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/movies")
+                .path("/{title}").resolveTemplate("title", movieTitle).request().get(list);
+        
+        return "allMovies";
+    }
+    
     // Get director by name
     // @GET
-    public String testGetDirector(){
+    public String testGetDirector(String passedDirectorName, boolean flag){
         Client client = ClientBuilder.newClient();
         directors = new ArrayList<>();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
+        if(flag) directorName = passedDirectorName;
         directors = client.target("http://localhost:8080/WebServiceDB/services/MyRestService/directors")
                 .path("/{directorname}").resolveTemplate("directorname", directorName).request().get(list);
       
@@ -142,18 +153,29 @@ public class RestClient {
         return "allDirectors";
     }
     
-    // Get User by UID
-    // @GET
-    public String testGetUser(){
+    // Creates and fills tables
+    // @POST
+    public String testCreateTables() {
         Client client = ClientBuilder.newClient();
-        User user = client.target(REST_SERVICE_URL).path("/{userid}")
-                .resolveTemplate("userid", uid).request().get(User.class);
+        
+        Form form = new Form();
       
-        System.out.println("ID:   " + user.getUid() + "\n\tName: " + user.getFirstName() + 
-            " " + user.getSurname() + "\n\tType: " + user.getUtype());
-        return "test";
+        Response callResult = client
+                .target("http://localhost:8080/WebServiceDB/services/MyRestService/tables")
+                .request(MediaType.APPLICATION_XML)
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                Response.class);
+        if(callResult.getStatus() == 200) {
+            tablesCreated = 1;
+            System.out.println(callResult.getStatus());
+        }
+        else {
+            System.out.println(callResult.getStatus());
+            tablesCreated = 2;
+        }
+      
+        return "index";
     }
-    
     
     // Add a User
     // @POST
@@ -173,6 +195,19 @@ public class RestClient {
         System.out.println(callResult.getLocation());
       
         return "index";
+    }
+    
+    
+    // Get User by UID
+    // @GET
+    public String testGetUser(){
+        Client client = ClientBuilder.newClient();
+        User user = client.target(REST_SERVICE_URL).path("/{userid}")
+                .resolveTemplate("userid", uid).request().get(User.class);
+      
+        System.out.println("ID:   " + user.getUid() + "\n\tName: " + user.getFirstName() + 
+            " " + user.getSurname() + "\n\tType: " + user.getUtype());
+        return "test";
     }
     
     
@@ -205,8 +240,14 @@ public class RestClient {
 
         return "test";
     }
-    
-    
+
+    public int getTablesCreated() {
+        return tablesCreated;
+    }
+
+    public void setTablesCreated(int tablesCreated) {
+        this.tablesCreated = tablesCreated;
+    }
     
     public int getUid() {
         return uid;
@@ -232,6 +273,14 @@ public class RestClient {
         this.directorName = directorName;
     }
 
+    public String getMovieTitle() {
+        return movieTitle;
+    }
+
+    public void setMovieTitle(String movieTitle) {
+        this.movieTitle = movieTitle;
+    }
+    
     public String getGenre() {
         return genre;
     }

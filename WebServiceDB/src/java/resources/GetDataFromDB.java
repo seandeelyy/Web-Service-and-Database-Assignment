@@ -77,6 +77,22 @@ public class GetDataFromDB {
     }
     
     /**
+     * Get movie by title name
+     * @param title Title of the movie to search
+     * @return Movies matching title
+     */
+    public ArrayList<Movie> getMovieByTitle(String title) {
+        ArrayList<Movie> moviesFound = new ArrayList<>();
+        ArrayList<Movie> movieList = getAllMovies(); 
+        for (Movie movie : movieList) {
+            if (movie.getTitle().toUpperCase().contains(title.toUpperCase())) {
+                moviesFound.add(movie);
+            }
+        }    
+        return moviesFound;
+    }
+    
+    /**
      * Get movie by genre
      * @param genre genre of the movie to search
      * @return movies belonging to requested genre

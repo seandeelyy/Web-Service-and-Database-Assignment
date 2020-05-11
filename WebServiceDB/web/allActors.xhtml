@@ -24,7 +24,7 @@
                     <div class="row">#{actor.actorID}</div>
                     <div class="row"> Movies: 
                         <ui:repeat value="#{actor.movieNames}" var="name">
-                            <h:commandLink value="#{name}" action="index"/>
+                            <h:commandLink value="#{name}" action="#{restClient.testGetMovieByTitle(name, true)}"/>
                             <h:outputText value=", " rendered="#{actor.movieNames[actor.movieNames.size() - 1] != name}"/>
                         </ui:repeat> 
                     </div>

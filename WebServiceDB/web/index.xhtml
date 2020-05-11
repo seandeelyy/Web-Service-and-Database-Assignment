@@ -4,11 +4,24 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="content">
 
         <h1>Welcome User!</h1>
+        <h:form>
+            <br>
+            <center>
+                <h:commandButton value="Create Tables" action="#{restClient.testCreateTables()}" 
+                                 rendered="#{restClient.tablesCreated == 0}" />
+                <h:outputText value="Tables have been successfully created and filled (Status: 200). "
+                             rendered="#{restClient.tablesCreated == 1}" />
+                <h:outputText value="Tables have NOT been created and filled (Status: 204). "
+                             rendered="#{restClient.tablesCreated == 2}" />
+            </center>
+            </br>
+	</h:form>
         <h:form>
             <br>
             <center>
@@ -32,10 +45,20 @@
 	</h:form>
         <!--http://localhost:8080/WebServiceDB/faces/index.xhtml-->
         <h:form>
+            <center><h:inputText value="#{restClient.movieTitle}"
+                                 a:placeholder="Enter Movie Title Here"/>
+            </center> 
+            <br>
+            <center>
+                <h:commandButton value="Find Movie" action="#{restClient.testGetMovieByTitle(null, false)}" />
+            </center>
+            </br>
+	</h:form>
+        <h:form>
             <center><h:inputText value="#{restClient.actorName}"/></center> 
             <br>
             <center>
-                <h:commandButton value="Find Actor" action="#{restClient.testGetActor()}" />
+                <h:commandButton value="Find Actor" action="#{restClient.testGetActor(null, false)}" />
             </center>
             </br>
 	</h:form>
@@ -44,27 +67,29 @@
             <center><h:inputText value="#{restClient.directorName}"/></center> 
             <br>
             <center>
-                <h:commandButton value="Find Director" action="#{restClient.testGetDirector()}" />
+                <h:commandButton value="Find Director" action="#{restClient.testGetDirector(null, false)}" />
             </center>
             </br>
 	</h:form>
         
         <h:form>
             <!--<center><h:inputText value="#{restClient.genre}"/></center>--> 
-            <h:selectOneMenu value="#{restClient.genre}">
-                <f:selectItem itemValue="Action" itemLabel="Action" />
-                <f:selectItem itemValue="Adventure" itemLabel="Adventure" />
-                <f:selectItem itemValue="Comedy" itemLabel="Comedy" />
-                <f:selectItem itemValue="Crime" itemLabel="Crime" />
-                <f:selectItem itemValue="Documentary" itemLabel="Documentary" />
-                <f:selectItem itemValue="Drama" itemLabel="Drama" />                
-                <f:selectItem itemValue="Horror" itemLabel="Horror" />
-                <f:selectItem itemValue="Musical" itemLabel="Musical" />
-                <f:selectItem itemValue="Romance" itemLabel="Romance" />
-                <f:selectItem itemValue="Romantic-Comedy" itemLabel="Romantic-Comedy" />                
-                <f:selectItem itemValue="Sci-Fi" itemLabel="Sci-Fi" />
-                <f:selectItem itemValue="Thriller" itemLabel="Thriller" />
-            </h:selectOneMenu>
+            <center>
+                <h:selectOneMenu value="#{restClient.genre}">
+                    <f:selectItem itemValue="Action" itemLabel="Action" />
+                    <f:selectItem itemValue="Adventure" itemLabel="Adventure" />
+                    <f:selectItem itemValue="Comedy" itemLabel="Comedy" />
+                    <f:selectItem itemValue="Crime" itemLabel="Crime" />
+                    <f:selectItem itemValue="Documentary" itemLabel="Documentary" />
+                    <f:selectItem itemValue="Drama" itemLabel="Drama" />                
+                    <f:selectItem itemValue="Horror" itemLabel="Horror" />
+                    <f:selectItem itemValue="Musical" itemLabel="Musical" />
+                    <f:selectItem itemValue="Romance" itemLabel="Romance" />
+                    <f:selectItem itemValue="Romantic-Comedy" itemLabel="Romantic-Comedy" />                
+                    <f:selectItem itemValue="Sci-Fi" itemLabel="Sci-Fi" />
+                    <f:selectItem itemValue="Thriller" itemLabel="Thriller" />
+                </h:selectOneMenu>
+            </center>
             <br>
             <center>
                 <h:commandButton value="Search by Genre" 
