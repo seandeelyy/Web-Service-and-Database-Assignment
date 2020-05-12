@@ -31,6 +31,7 @@ import resources.GetUserDataFromDB;
 import resources.GetDataFromDB;
 import resources.InsertDataIntoDB;
 import resources.CreateTables;
+import resources.DeleteTables;
 import resources.FillTables;
 
 /**
@@ -46,6 +47,7 @@ public class RestService extends Application {
     InsertDataIntoDB insertData = new InsertDataIntoDB();
     CreateTables createTables = new CreateTables();
     FillTables fillTables = new FillTables();
+    DeleteTables deleteTables = new DeleteTables();
     
     // http://localhost:8080/WebServiceDB/services/MyRestService/users
     
@@ -94,7 +96,7 @@ public class RestService extends Application {
     }
     
     @PUT
-    @Path("/test")
+    @Path("/addMovie")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response addMovie(@FormParam("title") String title,
@@ -127,8 +129,15 @@ public class RestService extends Application {
     public Response addActor(
             @FormParam("actorFirstName") String actorFirstName,
             @FormParam("actorLastName") String actorLastName,
+            @FormParam("year") int year,
+            @FormParam("month") int month,
+            @FormParam("day") int day,
+            @FormParam("actorEmail") String actorEmail,
+            @FormParam("actorImage") String actorImage,
             @Context HttpServletResponse servletResponse) throws IOException{
-        if (insertData.addActor(actorFirstName, actorLastName)) {
+        
+        if (insertData.addActor(actorFirstName, actorLastName, year, month, 
+                day, actorEmail, actorImage)) {
             System.out.println(Response.ok().build());
             return Response.ok().build();
         }
@@ -137,15 +146,38 @@ public class RestService extends Application {
              return Response.noContent().build();
         }
     }
-   
-   
-    @DELETE
-    @Path("/users/{userid}")
+    
+    @PUT
+    @Path("/addBoth")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String deleteUser(@PathParam("userid") int uid ) {
-        userData.deleteUser(uid);
+    public String addtoActors_MoviesTable(
+            @FormParam("actorFirstName") String actorFirstName,
+            @FormParam("actorLastName") String actorLastName,
+            @FormParam("title") String title,
+            @Context HttpServletResponse servletResponse) throws IOException{
+        
+        insertData.AddToActors_MoviesTable(actorFirstName, actorLastName, title);
+        
         return "";
+    }
+    
+    
+    @DELETE
+    @Path("/tables/delete")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response deleteTables() {
+        if (deleteTables.deleteActorCredentialsTable() &&
+            deleteTables.deleteActorsTable() &&
+            deleteTables.deleteActors_MoviesTable() &&
+            deleteTables.deleteMoviesTable() &&
+            deleteTables.deleteDirectorsTable() &&
+            deleteTables.deleteGenresTable()) {
+            return Response.ok().build();
+        }
+        else {
+            return Response.noContent().build();
+        }
     }
     
     @POST
@@ -155,10 +187,9 @@ public class RestService extends Application {
     public Response createTable() {
         
         if (createTables.createActorsTable() &&
-            
+            fillTables.fillActorsTable() &&
             createTables.createActorCredentialsTable() &&
-                fillTables.fillActorsTable() &&
-//            fillTables.fillActorCredentialsTable() &&
+            fillTables.fillActorCredentialsTable() &&
             createTables.createDirectorsTable() &&
             fillTables.fillDirectorsTable() &&
             createTables.createGenresTable() &&
@@ -167,12 +198,9 @@ public class RestService extends Application {
             fillTables.fillMoviesTable() &&
             createTables.createActors_MoviesTable() &&
             fillTables.fillActors_MoviesTable()) {
-            
-            System.out.println(Response.ok().build());
             return Response.ok().build();
         }
         else {
-            System.out.println(Response.noContent().build());
              return Response.noContent().build();
         }
     }  

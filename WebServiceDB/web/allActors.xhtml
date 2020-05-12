@@ -10,26 +10,37 @@
         
         <h:form>
             <h:dataTable value="#{restClient.actors}" var="actor" class="center_content"
-                         width='600' cellspacing="10" columnClasses="odd-col,even-col">
+                         width='600' cellspacing="10" columnClasses="odd-col,even-col" 
+                         rendered="#{not empty restClient.actors}" >
                 <h:column >
-                    <h:graphicImage name="#{actor.image}" library="images" width="150" height="150"
+                    <h:graphicImage name="#{actor.image}" library="images" width="250" height="250"
                                     rendered="#{!empty actor.image}" />
-                    <h:graphicImage name="icon.png" library="images" width="100" height="100"
+                    <h:graphicImage name="icon.png" library="images" width="250" height="250"
                                     rendered="#{empty actor.image}" />
                 </h:column>
                 <h:column>
-                    <div class="row"> 
-                        <h:commandLink value="#{actor.firstName} #{actor.lastName}" action="index"/> 
-                    </div>
-                    <div class="row">#{actor.actorID}</div>
+                    <div class="row"><b>#{actor.firstName} #{actor.lastName} </b></div>
+                    <div class="row">Actor ID: #{actor.actorID}</div>
+                    <div class="row">Born: #{actor.DOB}</div>
                     <div class="row"> Movies: 
                         <ui:repeat value="#{actor.movieNames}" var="name">
                             <h:commandLink value="#{name}" action="#{restClient.testGetMovieByTitle(name, true)}"/>
                             <h:outputText value=", " rendered="#{actor.movieNames[actor.movieNames.size() - 1] != name}"/>
                         </ui:repeat> 
                     </div>
+                    <div class="row">Contact Info: #{actor.email}</div>
                 </h:column>
             </h:dataTable>
+            <br></br>
+            <center>
+                <h:outputText value="Actor #{restClient.actorName} 
+                              does not exist in this database! Try again or go to step 5!" 
+                              rendered="#{empty restClient.actors}" />
+            </center>
+            <br></br>
+            <center>
+                <h:commandButton value="Back" action="index" />
+            </center>
         </h:form>
         
     </ui:define>

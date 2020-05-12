@@ -26,8 +26,21 @@
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="2. One-to-One Query" /><br></br><br></br></b>
-                <h:commandButton value="Invoke" />
+                <b><h:outputText value="2. One-to-One Query" /></b>
+                <br></br><br></br>
+                <h:outputText value="Get information about an Actor. "/>
+                <br></br><br></br>
+                <h:selectOneMenu value="#{restClient.actorName}">
+                    <f:selectItem itemValue="Tom Hardy" itemLabel="Tom Hardy" />
+                    <f:selectItem itemValue="Leonardo DiCaprio" itemLabel="Leonardo DiCaprio" />
+                    <f:selectItem itemValue="Michael Fassbender" itemLabel="Michael Fassbender" />
+                    <f:selectItem itemValue="Christian Bale" itemLabel="Christian Bale" />
+                    <f:selectItem itemValue="Heath Ledger" itemLabel="Heath Ledger" />
+                    <f:selectItem itemValue="Will Ferrell" itemLabel="Will Ferrell" />
+                    <f:selectItem itemValue="John Travolta" itemLabel="John Travolta" />
+                </h:selectOneMenu>
+                <br></br><br></br>
+                <h:commandButton value="Invoke" action="#{restClient.testGetActor(null, false)}" />
             </center>
             </br><br></br>
 	</h:form>
@@ -62,7 +75,19 @@
             <center>
                 <b><h:outputText value="5. Add an entry to a table with a One-to-One relationship" /></b>
                 <br></br><br></br>
-                <h:commandButton value="Invoke" action="#{restClient.testAddActor('Tom', 'Hardy')}" />
+                <h:outputText value="This will add 'John Travolta' to the 'Actors' table AND "/><br></br>
+                <h:outputText value="add his credentials to the 'ActorCredentials' table. "/><br></br><br></br>
+                <h:outputText value="Before doing so, first search the database for 'John Travolta'"/><br></br>
+                <h:outputText value="by invoking Step 2 to ensure he doesn't already exist. "/><br></br><br></br>
+                <h:outputText value="Then invoke this step."/><br></br>
+                <br></br><br></br>
+                <h:commandButton value="Invoke" action="#{restClient.testAddActor('John', 'Travolta', 1954,
+                                                          1, 18, 'john@travolta.com', 'John Travolta.png')}" 
+                                 rendered="#{restClient.actorAdded == false}" />
+                 <h:outputText value="Actor 'John Travolta' has been successfully added (Status: 200). "
+                             rendered="#{restClient.actorAdded == true}" /><br></br><br></br>
+                 <h:outputText value="Re-Invoke Step 2 to verify that he has been added! "
+                             rendered="#{restClient.actorAdded == true}" /><br></br><br></br>
             </center>
             </br>
 	</h:form>
@@ -77,7 +102,7 @@
                                  rendered="#{restClient.movieAdded == 0}"/>
                 <h:outputText value="Movie 'Pulp Fiction' (Crime) has been successfully added (Status: 200). "
                              rendered="#{restClient.movieAdded == 1}" /><br></br><br></br>
-                <h:outputText value="Invoke step 3/4 to view result! "
+                <h:outputText value="Invoke step 3/4 to verify result! (Notice that Actors is blank) "
                              rendered="#{restClient.movieAdded == 1}" />
                 <h:outputText value="Movie was not added, please restart and try again! (Status: 204). "
                              rendered="#{restClient.movieAdded == 2}" />
@@ -89,106 +114,16 @@
             <center>
                 <b><h:outputText value="7. Add an entry to a table with a Many-to-Many relationship" /></b>
                 <br></br><br></br>
-                <h:commandButton value="Invoke"  />
+                <h:commandButton value="Invoke" action="#{restClient.testAddBoth('John', 'Travolta', 'Pulp Fiction')}" />
             </center>
             </br>
 	</h:form>
         <h:form>
             <br>
             <center>
-                <h:commandButton value="Find All Actors" action="#{restClient.testGetAllActors()}" />
-            </center>
-            </br>
-	</h:form>
-        <h:form>
-            <br>
-            <center>
-                <h:commandButton value="Find All Movies" action="#{restClient.testGetAllMovies()}" />
-            </center>
-            </br>
-	</h:form>
-        <h:form>
-            <br>
-            <center>
-                <h:commandButton value="Find All Directors" action="#{restClient.testGetAllDirectors()}" />
-            </center>
-            </br>
-	</h:form>
-        <!--http://localhost:8080/WebServiceDB/faces/index.xhtml-->
-        <h:form>
-            <center><h:inputText value="#{restClient.movieTitle}"
-                                 a:placeholder="Enter Movie Title Here"/>
-            </center> 
-            <br>
-            <center>
-                <h:commandButton value="Find Movie" action="#{restClient.testGetMovieByTitle(null, false)}" />
-            </center>
-            </br>
-	</h:form>
-        <h:form>
-            <center><h:inputText value="#{restClient.actorName}"/></center> 
-            <br>
-            <center>
-                <h:commandButton value="Find Actor" action="#{restClient.testGetActor(null, false)}" />
-            </center>
-            </br>
-	</h:form>
-        
-        <h:form>
-            <center><h:inputText value="#{restClient.directorName}"/></center> 
-            <br>
-            <center>
-                <h:commandButton value="Find Director" action="#{restClient.testGetDirector(null, false)}" />
-            </center>
-            </br>
-	</h:form>
-        
-        <h:form>
-            <!--<center><h:inputText value="#{restClient.genre}"/></center>--> 
-            <center>
-                <h:selectOneMenu value="#{restClient.genre}">
-                    <f:selectItem itemValue="Action" itemLabel="Action" />
-                    <f:selectItem itemValue="Adventure" itemLabel="Adventure" />
-                    <f:selectItem itemValue="Comedy" itemLabel="Comedy" />
-                    <f:selectItem itemValue="Crime" itemLabel="Crime" />
-                    <f:selectItem itemValue="Documentary" itemLabel="Documentary" />
-                    <f:selectItem itemValue="Drama" itemLabel="Drama" />                
-                    <f:selectItem itemValue="Horror" itemLabel="Horror" />
-                    <f:selectItem itemValue="Musical" itemLabel="Musical" />
-                    <f:selectItem itemValue="Romance" itemLabel="Romance" />
-                    <f:selectItem itemValue="Romantic-Comedy" itemLabel="Romantic-Comedy" />                
-                    <f:selectItem itemValue="Sci-Fi" itemLabel="Sci-Fi" />
-                    <f:selectItem itemValue="Thriller" itemLabel="Thriller" />
-                </h:selectOneMenu>
-            </center>
-            <br>
-            <center>
-                <h:commandButton value="Search by Genre" 
-                                 action="#{restClient.testGetMovieByGenre()}" />
-            </center>
-            </br>
-	</h:form>
-        
-        <h:form>
-            <br>
-            <center>
-                <h:commandButton value="Add user" action="#{restClient.testAddUser()}" />
-            </center>
-            </br>
-	</h:form>
-        
-        <h:form>
-            <br>
-            <center>
-                <h:commandButton value="Edit user" action="#{restClient.testUpdateUser(1003, 'Provider')}" />
-            </center>
-            </br>
-	</h:form>
-        
-        <h:form>
-            <br>
-            <center>
-                <h:commandButton value="Delete user" action="#{restClient.testDeleteUser()}" />
+                <b><h:outputText value="8. Delete/Drop Tables (Optional)." /></b>
+                <br></br><br></br>
+                <h:commandButton value="Invoke" action="#{restClient.testDeleteTables()}" />
             </center>
             </br>
 	</h:form>

@@ -127,7 +127,8 @@ public class GetDataFromDB {
             while (result.next()) {
                 // get data out - note: index starts at 1 !!!!
                 actor = (new Movie(result.getInt(1), result.getString(2), 
-                        result.getString(3), result.getString(4),
+                        result.getString(3), getActorDateOfBirth(result.getInt(1)),
+                        getActorEmail(result.getInt(1)), getActorImage(result.getInt(1)),
                         getMoviesFtActor(result.getInt(1))));
                 actorList.add(actor);
             }           
@@ -468,5 +469,95 @@ public class GetDataFromDB {
         }
         System.out.println(movieNames);
         return movieNames;
+    }
+    
+    /**
+     * This function along with 'getActorEmail' and 'getActorImage' are probably 
+     * not the best way to retrieve these details, but its the only way I could get
+     * it to work.
+     * This function retrieves the Date of Birth of each actor
+     * @param actorID ID of actor for which date of birth is being retrieved
+     * @return Date of birth in string format
+     */
+    public String getActorDateOfBirth(int actorID) {
+        String sql = "SELECT DOB FROM ACTORCREDENTIALS WHERE ID=" + 
+                Integer.toString(actorID);
+        String dob = "";
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                dob = result.getDate(1).toString();
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return dob;
+    }
+    
+    /**
+     * This function retrieves the email of each actor
+     * @param actorID ID of actor for which email is being retrieved
+     * @return Email of actor
+     */
+    public String getActorEmail(int actorID) {
+        String sql = "SELECT EMAIL FROM ACTORCREDENTIALS WHERE ID=" + 
+                Integer.toString(actorID);
+        String email = "";
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                email = result.getString(1);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return email;
+    }
+    
+    /**
+     * This function retrieves an image of each actor
+     * @param actorID ID of actor for which the image is being retrieved
+     * @return Image of actor
+     */
+    public String getActorImage(int actorID) {
+        String sql = "SELECT IMAGE FROM ACTORCREDENTIALS WHERE ID=" + 
+                Integer.toString(actorID);
+        String image = "";
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                image = result.getString(1);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return image;
     }
 }

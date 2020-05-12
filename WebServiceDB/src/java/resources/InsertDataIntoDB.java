@@ -141,7 +141,6 @@ public class InsertDataIntoDB {
      * @return Director if match was found, null otherwise
      */
     public Movie CheckIfDirectorExists(String firstName, String lastName) {
-        ArrayList<Movie> directorsFound = new ArrayList<>();
         ArrayList<Movie> directorList = getAllDirectors();
         for (Movie director : directorList) {
             String fullName = (director.getFirstName() + " " 
@@ -166,6 +165,7 @@ public class InsertDataIntoDB {
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
             PreparedStatement pstmt = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+            
             pstmt.setString(1, firstName);
             pstmt.setString(2, lastName);
 
@@ -234,16 +234,61 @@ public class InsertDataIntoDB {
         return null;
     }
     
-    
-    public boolean addActor(String actorFirstName, String actorLastName) {
+    /**
+     * This function adds an actor to the 'ACTORS' table, if the actor does not
+     * already exist.
+     * @param actorFirstName First name of actor to add
+     * @param actorLastName Last name of actor to add
+     * @param year Year actor was born
+     * @param month Month actor was born
+     * @param day Day actor was born
+     * @param actorEmail Email address of actor
+     * @param actorImage Image of actor
+     * @return True if actor successfully added, false otherwise.
+     */
+    public boolean addActor(String actorFirstName, String actorLastName,
+            int year, int month, int day, String actorEmail, String actorImage) {
         boolean actorAdded = false;
+        String sql = "INSERT INTO ACTORS(FIRSTNAME, LASTNAME) VALUES(?,?)";
+        
         actor = checkIfActorExists(actorFirstName, actorLastName);
-        if (actor != null) {
-            System.out.println(actor.getFirstName() + " " + actor.getLastName() + 
-                    " aleady exits");
+        
+        if (actor == null) {
+            // use try with resource
+            try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                PreparedStatement pstmt = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+                
+                pstmt.setString(1, actorFirstName);
+                pstmt.setString(2, actorLastName);
+
+                // execute statement 
+                if (pstmt.executeUpdate() == 1) {
+                    System.out.println(
+                            "Row for " + actorFirstName + " " 
+                                    + actorLastName + " has been added");
+                }
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        addActorCredentials(generatedKeys.getInt(1), year, 
+                                month, day, actorEmail, actorImage);
+                    }
+                    else {
+                        throw new SQLException("Adding actor credentials failed, "
+                                + "no ID obtained.");
+                    }
+                }
+            } catch (SQLException sqle) {
+                System.out.println("Message: " + sqle.getMessage());
+                System.out.println("Code: " + sqle.getSQLState());
+            } actorAdded = true;
+        }
+        else {
+            System.out.println("Row for: " + actor.getFirstName() + " " + 
+                    actor.getLastName() + " aleady exits in ACTORS table");
         }
         return actorAdded;
     }
+    
     /**
      * Check if actor already exists in database
      * @param firstName First name of actor to search
@@ -260,5 +305,97 @@ public class InsertDataIntoDB {
             }
         }
         return null;
+    }
+    
+    /**
+     * This functions adds the credentials of the given actor to the 
+     * 'ActorCredentials' table.
+     * @param actorID ID of actor
+     * @param year Year actor was born
+     * @param month Month actor was born
+     * @param day Day actor was born
+     * @param actorEmail Email of address actor
+     * @param actorImage Image of actor
+     */
+    public void addActorCredentials(int actorID, int year, int month, int day, 
+            String actorEmail, String actorImage) {
+        String sql = "INSERT INTO ACTORCREDENTIALS(ID, DOB, EMAIL, IMAGE) "
+                + "VALUES(?,?,?,?)";
+        
+        // use try with resource
+            try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                    PreparedStatement pstmt = connect.prepareStatement(sql);) {
+
+                    pstmt.setInt(1, actorID);
+                    pstmt.setDate(2, Date.valueOf(LocalDate.of(year, month, day).toString()));
+                    pstmt.setString(3, actorEmail);
+                    pstmt.setString(4, actorImage);
+
+                    // execute statement 
+                    if (pstmt.executeUpdate() == 1) {
+                        System.out.println(
+                                "Row for " + actorID + " has been added to the"
+                                        + " ACTORCREDENTIALS table.");
+                    }
+            } catch (SQLException sqle) {
+                System.out.println("Message: " + sqle.getMessage());
+                System.out.println("Code: " + sqle.getSQLState());
+            }
+    }
+    
+    public void AddToActors_MoviesTable(String actorFirstName, 
+            String actorLastName, String movieTitle) {
+        
+        actor = checkIfActorExists(actorFirstName, actorLastName);
+        
+        movie = checkIfMovieExists(movieTitle);
+        
+        
+        if (actor == null && movie == null) {
+            System.out.println("NEITHER");
+            
+        }
+        else if (actor == null) {
+            System.out.println("No record for actor '" + actorFirstName + " " + 
+                    actorLastName + "' exists in this database, please add this"
+                            + " actor first!");
+        }
+        else if (movie == null) {
+            System.out.println("No record for movie '" + movieTitle +  
+                    "' exists in this database, please add this"
+                            + " movie first!");
+        }
+        else {
+            System.out.println("Actor ID:    " + actor.getActorID());
+            System.out.println("Actor Name:  " + actor.getFirstName() + " " + actor.getLastName());
+            System.out.println("Movie ID:    " + movie.getMovieID());
+            System.out.println("Movie Title: " + movie.getTitle());
+            
+            String sql = "INSERT INTO ACTORS_MOVIES(ACTORID, MOVIEID) "
+                + "VALUES(?,?)";
+        
+            // use try with resource
+            try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                    PreparedStatement pstmt = connect.prepareStatement(sql);) {
+
+                    pstmt.setInt(1, actor.getActorID());
+                    pstmt.setInt(2, movie.getMovieID());
+                    // execute statement 
+                    if (pstmt.executeUpdate() == 1) {
+                        System.out.println(
+                                "Row for " + actor.getFirstName() + " " + 
+                                        actor.getLastName() + " & " +
+                                        movie.getTitle() +                                    
+                                        " has been added to the"
+                                        + " ACTORS_MOVIES table.");
+                    }
+            } catch (SQLException sqle) {
+                System.out.println("Message: " + sqle.getMessage());
+                System.out.println("Code: " + sqle.getSQLState());
+            }
+            
+        }
+        
+        
     }
 }

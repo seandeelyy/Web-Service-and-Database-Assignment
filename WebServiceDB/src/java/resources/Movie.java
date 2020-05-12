@@ -29,6 +29,8 @@ public class Movie {
     private String firstName;
     private String lastName;
     private String email;
+    private LocalDate dateOfBirth;
+    private String DOB;
     private int directorID;
     private int genreID;
     private String genre;
@@ -95,12 +97,28 @@ public class Movie {
      * @param movieNames Movies which actor has appeared in.
      */
     public Movie(int actorID, String firstName, String lastName, 
-            String image, ArrayList<String> movieNames) {
+            String DOB, String email, String image, 
+            ArrayList<String> movieNames) {
         this.actorID = actorID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.DOB = DOB;
+        this.email = email;
         this.image = image;
         this.movieNames = movieNames;
+    }
+    
+    /**
+     * Creates a Movie (actor) object with given information
+     * @param firstName First name of actor
+     * @param lastName Last name of actor
+     * @param image picture of actor
+     */
+    public Movie(int actorID, LocalDate dateOfBirth, String email, String image) {
+        this.actorID = actorID;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.image = image;
     }
     
     /**
@@ -514,6 +532,22 @@ public class Movie {
      */
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
     }
     
     /**
