@@ -31,6 +31,8 @@ public class RestClient {
     private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/movies";
     private int tablesCreated;
     private int movieAdded;
+    private boolean actorAdded;
+    private boolean tablesDeleted;
     private int uid;
     private String actorName;
     private String genre;
@@ -177,6 +179,28 @@ public class RestClient {
         return "index";
     }
     
+    // Creates and fills tables
+    // @DELETE
+    public String testDeleteTables() {
+        Client client = ClientBuilder.newClient();
+      
+        Response callResult = client
+                .target("http://localhost:8080/WebServiceDB/services/MyRestService/tables/delete")
+                .request(MediaType.APPLICATION_XML)
+                .delete(Response.class);
+        if(callResult.getStatus() == 200) {
+            tablesDeleted = true;
+            System.out.println(callResult.getStatus());
+            return "tablesDeleted";
+        }
+        else {
+            System.out.println(callResult.getStatus());
+            tablesDeleted = false;
+            return "index";
+        }
+        
+    }
+    
     // Add a User
     // @POST
     public String testAddUser() {
@@ -248,7 +272,7 @@ public class RestClient {
         form.param("genre", genre);
 
         Response callResult = client
-                .target("http://localhost:8080/WebServiceDB/services/MyRestService/test").request(MediaType.APPLICATION_XML)
+                .target("http://localhost:8080/WebServiceDB/services/MyRestService/addMovie").request(MediaType.APPLICATION_XML)
                 .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
                 Response.class);
         
@@ -266,26 +290,51 @@ public class RestClient {
     
     // Adds a movie to the database
     // @PUT
-    public String testAddActor(String actorFirstName, String actorLastName){
+    public String testAddActor(String actorFirstName, String actorLastName,
+            int year, int month, int day, String actorEmail, String actorImage){
         Client client = ClientBuilder.newClient();
         
         Form form = new Form();
         form.param("actorFirstName", actorFirstName);
         form.param("actorLastName", actorLastName);
+        form.param("year", Integer.toString(year));
+        form.param("month", Integer.toString(month));
+        form.param("day", Integer.toString(day));
+        form.param("actorEmail", actorEmail);
+        form.param("actorImage", actorImage);
         
         Response callResult = client
                 .target("http://localhost:8080/WebServiceDB/services/MyRestService/addActor").request(MediaType.APPLICATION_XML)
                 .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
                 Response.class);
         
-//        if(callResult.getStatus() == 200) {
-//            movieAdded = 1;
-//            System.out.println(callResult.getStatus());
-//        }
-//        else {
-//            System.out.println(callResult.getStatus());
-//            movieAdded = 2;
-//        }
+        if(callResult.getStatus() == 200) {
+            actorAdded = true;
+            System.out.println(callResult.getStatus());
+        }
+        else {
+            System.out.println(callResult.getStatus());
+            actorAdded = false;
+        }
+      
+        return "index";
+    }
+    
+    // Adds a movie to the database
+    // @PUT
+    public String testAddBoth(String actorFirstName, String actorLastName,
+            String title){
+        Client client = ClientBuilder.newClient();
+        
+        Form form = new Form();
+        form.param("actorFirstName", actorFirstName);
+        form.param("actorLastName", actorLastName);
+        form.param("title", title);
+        
+        String callResult = client
+                .target("http://localhost:8080/WebServiceDB/services/MyRestService/addBoth").request(MediaType.APPLICATION_XML)
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
+                String.class);
       
         return "index";
     }
@@ -317,6 +366,14 @@ public class RestClient {
 
     public void setMovieAdded(int movieAdded) {
         this.movieAdded = movieAdded;
+    }
+
+    public boolean isActorAdded() {
+        return actorAdded;
+    }
+
+    public void setActorAdded(boolean actorAdded) {
+        this.actorAdded = actorAdded;
     }
     
     
@@ -360,5 +417,15 @@ public class RestClient {
     public void setGenre(String genre) {
         this.genre = genre;
     }  
+
+    public boolean isTablesDeleted() {
+        return tablesDeleted;
+    }
+
+    public void setTablesDeleted(boolean tablesDeleted) {
+        this.tablesDeleted = tablesDeleted;
+    }
+    
+    
     
 }

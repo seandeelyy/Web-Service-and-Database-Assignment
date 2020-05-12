@@ -31,22 +31,21 @@ public class FillTables {
         boolean actorsAdded = false;
         
         Movie[] actors = {
-            new Movie("Tom", "Hardy", "Tom Hardy.png"), 
-            new Movie("Leonardo", "DiCaprio", "Leonardo DiCaprio.png"),
-            new Movie("Michael", "Fassbender", "Michael Fassbender.png"), 
-            new Movie("Christian", "Bale", "Christian Bale.png"), 
-            new Movie("Heath", "Ledger", "Heath Ledger.png"), 
-            new Movie("Will", "Ferrell", "Will Ferrell.png") 
+            new Movie("Tom", "Hardy"), 
+            new Movie("Leonardo", "DiCaprio"),
+            new Movie("Michael", "Fassbender"), 
+            new Movie("Christian", "Bale"), 
+            new Movie("Heath", "Ledger"), 
+            new Movie("Will", "Ferrell") 
         }; 
         
         List<Movie> actorList = Arrays.asList(actors);
         
-        String sql = "INSERT INTO ACTORS(FIRSTNAME, LASTNAME, IMAGE) VALUES(?,?,?)";
-        String sq2 = "INSERT INTO ACTORCREDENTIALS(EMAIL) VALUES(?)";
+        String sql = "INSERT INTO ACTORS(FIRSTNAME, LASTNAME) VALUES(?,?)";
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-                PreparedStatement pstmt = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+                PreparedStatement pstmt = connect.prepareStatement(sql);) {
 
             ListIterator<Movie> lit = actorList.listIterator();
             Movie m;
@@ -54,7 +53,6 @@ public class FillTables {
                 m = lit.next();
                 pstmt.setString(1, m.getFirstName());
                 pstmt.setString(2, m.getLastName());
-                pstmt.setString(3, m.getImage());
 
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
@@ -62,14 +60,6 @@ public class FillTables {
                             "Row for " + m.getFirstName() + " " 
                                     + m.getLastName() + " has been added");
                 }
-                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-//                    fillActorCredentialsTable(generatedKeys.getInt(1));
-                }
-                else {
-                    throw new SQLException("Adding actor credentials failed, no ID obtained.");
-                }
-            }
             } actorsAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
@@ -82,19 +72,21 @@ public class FillTables {
      * Adds credentials to the ACTORCREDENTIALS table
      * @return true if credentials were sucessfully added, false otherwise
      */
-    public void fillActorCredentialsTable(int actorID) {
-        
+    public boolean fillActorCredentialsTable() {
+        boolean credentialsAdded = false;
         Movie[] emails = {
-            new Movie("tomhardy@gmail.com"), new Movie("leonardodicaprio@gmail.com"), 
-            new Movie("michael_fassbender@hotmail.com"), 
-            new Movie("christianBale@yahoomail.com"), 
-            new Movie("heath_ledger@gmail.com"), 
-            new Movie("WillFerrel@studentmail.ul.ie"), 
+            new Movie(1000, LocalDate.of(1977, 10, 15), "tom@hardy.com", "Tom Hardy.png"), 
+            new Movie(1001, LocalDate.of(1974, 11, 11), "leonardo@dicaprio.com", "Leonardo DiCaprio.png"), 
+            new Movie(1002, LocalDate.of(1977, 4, 2), "michael@hfassbender.com", "Michael Fassbender.png"), 
+            new Movie(1003, LocalDate.of(1974, 1, 30), "christian@bale.com", "Christian Bale.png"), 
+            new Movie(1004, LocalDate.of(1979, 4, 4), "heath@ledger.com", "Heath Ledger.png"), 
+            new Movie(1005, LocalDate.of(1967, 7, 16), "will@ferrell.com", "Will Ferrell.png"), 
         }; 
         
         List<Movie> emailList = Arrays.asList(emails);
         
-        String sql = "INSERT INTO ACTORCREDENTIALS(ID, EMAIL) VALUES(?,?)";
+        String sql = "INSERT INTO ACTORCREDENTIALS(ID, DOB, EMAIL, IMAGE) "
+                + "VALUES(?,?,?,?)";
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -104,19 +96,21 @@ public class FillTables {
             Movie m;
             while (lit.hasNext()) {
                 m = lit.next();
-                pstmt.setInt(1, actorID);
-                pstmt.setString(2, m.getEmail());
-
-                // execute statement 
+                pstmt.setInt(1, m.getActorID());
+                pstmt.setDate(2, Date.valueOf(m.getDateOfBirth().toString()));
+                pstmt.setString(3, m.getEmail());
+                pstmt.setString(4, m.getImage());
                 if (pstmt.executeUpdate() == 1) {
                     System.out.println(
                             "Row for " + m.getEmail() + " has been added");
                 }
-            }
+            } credentialsAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
+        
+        return credentialsAdded;
     }
 
     /**
