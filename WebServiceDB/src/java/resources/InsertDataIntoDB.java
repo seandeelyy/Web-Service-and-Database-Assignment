@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import resources.User;
+import resources.GetDataFromDB;
 
 /**
  *
@@ -27,7 +28,10 @@ public class InsertDataIntoDB {
     
     private static ArrayList<Movie> directorList = new ArrayList<>();
     private Movie director;
+    private Movie movie;
+    private Movie actor;
     private int directorID;
+    GetDataFromDB getData = new GetDataFromDB();
     
     private static final String URL = "jdbc:derby://localhost:1527/myDB";
     private static final String USER = "app";
@@ -47,44 +51,54 @@ public class InsertDataIntoDB {
      * @param genre Genre of movie to be added as a String
      * @return true if movie was added, false otherwise
      */
-    public boolean fillMoviesTable(String title, String description, int runTime,
+    public boolean addMovie(String title, String description, int runTime,
             int year, int month, int day, String trailer, String directorFirstName, 
             String directorLastName, String genre) {
         
         boolean movieAdded = false;
-        director = getDirectorByName(directorFirstName, directorLastName);
+        director = CheckIfDirectorExists(directorFirstName, directorLastName);
+        movie = checkIfMovieExists(title);
         
-        if(director == null) {
-            System.out.println("null");
-            directorID = addDirector(directorFirstName, directorLastName);
+        // if movie doesn't already exist, create movie entry
+        if (movie == null) {
+            // if director does not exist, add new director
+            if(director == null) {
+                System.out.println("null");
+                directorID = addDirector(directorFirstName, directorLastName);
+            }
+            // otherwise, use ID of existing director
+            else {
+                directorID = director.getDirectorID();
+            }
+            String sql = "INSERT INTO MOVIES(TITLE, DESCRIPTION, RUNTIME, RELEASEDATE,"
+                    + "TRAILER, DIRECTOR, GENRE) VALUES(?,?,?,?,?,?,?)";
+
+            // use try with resource
+            try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                    PreparedStatement pstmt = connect.prepareStatement(sql);) {
+
+                    pstmt.setString(1, title);
+                    pstmt.setString(2, description);
+                    pstmt.setInt(3, runTime);
+                    pstmt.setDate(4, Date.valueOf(LocalDate.of(year, month, day).toString()));
+                    pstmt.setString(5, trailer);
+                    pstmt.setInt(6, directorID);
+                    pstmt.setInt(7, getGenreID(genre));
+
+                    // execute statement 
+                    if (pstmt.executeUpdate() == 1) {
+                        System.out.println(
+                                "Row for " + title + " has been added");
+                    }
+                 movieAdded = true;
+            } catch (SQLException sqle) {
+                System.out.println("Message: " + sqle.getMessage());
+                System.out.println("Code: " + sqle.getSQLState());
+            }
         }
         else {
-            directorID = director.getDirectorID();
-        }
-        String sql = "INSERT INTO MOVIES(TITLE, DESCRIPTION, RUNTIME, RELEASEDATE,"
-                + "TRAILER, DIRECTOR, GENRE) VALUES(?,?,?,?,?,?,?)";
-        
-        // use try with resource
-        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-                PreparedStatement pstmt = connect.prepareStatement(sql);) {
-
-                pstmt.setString(1, title);
-                pstmt.setString(2, description);
-                pstmt.setInt(3, runTime);
-                pstmt.setDate(4, Date.valueOf(LocalDate.of(year, month, day).toString()));
-                pstmt.setString(5, trailer);
-                pstmt.setInt(6, directorID);
-                pstmt.setInt(7, 4);
-
-                // execute statement 
-                if (pstmt.executeUpdate() == 1) {
-                    System.out.println(
-                            "Row for " + title + " has been added");
-                }
-             movieAdded = true;
-        } catch (SQLException sqle) {
-            System.out.println("Message: " + sqle.getMessage());
-            System.out.println("Code: " + sqle.getSQLState());
+            System.out.println("Movie "+ movie.getTitle() + " already exists!");
+            movieAdded = false;
         }
         return movieAdded;
     }
@@ -121,12 +135,12 @@ public class InsertDataIntoDB {
     }
     
     /**
-     * Get directors by name
+     * Check if director already exists in database
      * @param firstName First name of director to search
      * @param lastName Last name of director to search
-     * @return All directors matching name
+     * @return Director if match was found, null otherwise
      */
-    public Movie getDirectorByName(String firstName, String lastName) {
+    public Movie CheckIfDirectorExists(String firstName, String lastName) {
         ArrayList<Movie> directorsFound = new ArrayList<>();
         ArrayList<Movie> directorList = getAllDirectors();
         for (Movie director : directorList) {
@@ -174,5 +188,77 @@ public class InsertDataIntoDB {
             System.out.println("Code: " + sqle.getSQLState());
         }
         return ID;
+    }
+    
+    /**
+     * Get the String representation of genre
+     * @param genre Genre of movie
+     * @return String representation of genre
+     */
+    public int getGenreID(String genre) {
+        int ID = 0;
+        String sql = "SELECT ID FROM GENRES WHERE GENRE='" + genre + "'";
+        
+        try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
+                Statement stmt = connect.createStatement();) {
+            
+            // execute statement - note DB needs to perform full processing
+            // on calling executeQuery
+            ResultSet result = stmt.executeQuery(sql);
+
+            // while there are results
+            while (result.next()) {
+                ID = result.getInt(1);
+            }           
+            // deal with any potential exceptions
+            // note: all resources are closed automatically - no need for finally
+        } catch (SQLException sqle) {
+            System.out.println("Message: " + sqle.getMessage());
+            System.out.println("Code: " + sqle.getSQLState());
+        }
+        return ID;        
+    }
+    
+    /**
+     * Check if movie already exists in database
+     * @param title Title of the movie to check
+     * @return Movie if match was found, null otherwise
+     */
+    public Movie checkIfMovieExists(String title) {
+        ArrayList<Movie> movieList = getData.getAllMovies(); 
+        for (Movie movie : movieList) {
+            if (movie.getTitle().toUpperCase().equals(title.toUpperCase())) {
+                return movie;
+            }
+        }    
+        return null;
+    }
+    
+    
+    public boolean addActor(String actorFirstName, String actorLastName) {
+        boolean actorAdded = false;
+        actor = checkIfActorExists(actorFirstName, actorLastName);
+        if (actor != null) {
+            System.out.println(actor.getFirstName() + " " + actor.getLastName() + 
+                    " aleady exits");
+        }
+        return actorAdded;
+    }
+    /**
+     * Check if actor already exists in database
+     * @param firstName First name of actor to search
+     * @param lastName Last name of actor to search
+     * @return Director if match was found, null otherwise
+     */
+    public Movie checkIfActorExists(String firstName, String lastName) {
+        ArrayList<Movie> actorList = getData.getAllActors(); 
+        for (Movie actor : actorList) {
+            String fullName = (actor.getFirstName() + " " 
+                    + actor.getLastName()).toUpperCase();
+            if (fullName.equals((firstName + " " + lastName).toUpperCase())) {
+                return actor;
+            }
+        }
+        return null;
     }
 }
