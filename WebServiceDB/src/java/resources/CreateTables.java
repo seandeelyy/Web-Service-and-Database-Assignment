@@ -55,8 +55,8 @@ public class CreateTables {
         
         boolean tableCreated = false;
         
-        String sql = "CREATE TABLE ActorCredentials(ID INTEGER, "
-                + "EMAIL VARCHAR(50), FOREIGN KEY(ID) REFERENCES ACTORS(ID))";
+        String sql = "CREATE TABLE ActorCredentials(ID INTEGER, EMAIL VARCHAR(50), "
+                + "FOREIGN KEY(ID) REFERENCES ACTORS(ID), UNIQUE(ID))";
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
                 Statement stmt = connect.createStatement();) {

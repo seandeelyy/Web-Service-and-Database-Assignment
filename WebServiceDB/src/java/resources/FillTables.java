@@ -28,7 +28,6 @@ public class FillTables {
      * @return true if actors were sucessfully added, false otherwise
      */
     public boolean fillActorsTable() {
-        
         boolean actorsAdded = false;
         
         Movie[] actors = {
@@ -47,7 +46,7 @@ public class FillTables {
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
-                PreparedStatement pstmt = connect.prepareStatement(sql);) {
+                PreparedStatement pstmt = connect.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
 
             ListIterator<Movie> lit = actorList.listIterator();
             Movie m;
@@ -63,6 +62,14 @@ public class FillTables {
                             "Row for " + m.getFirstName() + " " 
                                     + m.getLastName() + " has been added");
                 }
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+//                    fillActorCredentialsTable(generatedKeys.getInt(1));
+                }
+                else {
+                    throw new SQLException("Adding actor credentials failed, no ID obtained.");
+                }
+            }
             } actorsAdded = true;
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
@@ -75,9 +82,7 @@ public class FillTables {
      * Adds credentials to the ACTORCREDENTIALS table
      * @return true if credentials were sucessfully added, false otherwise
      */
-    public boolean fillActorCredentialsTable() {
-        
-        boolean credentialsAdded = false;
+    public void fillActorCredentialsTable(int actorID) {
         
         Movie[] emails = {
             new Movie("tomhardy@gmail.com"), new Movie("leonardodicaprio@gmail.com"), 
@@ -89,7 +94,7 @@ public class FillTables {
         
         List<Movie> emailList = Arrays.asList(emails);
         
-        String sql = "INSERT INTO ACTORCREDENTIALS(EMAIL) VALUES(?)";
+        String sql = "INSERT INTO ACTORCREDENTIALS(ID, EMAIL) VALUES(?,?)";
         
         // use try with resource
         try (Connection connect = DriverManager.getConnection(URL, USER, PASSWD);
@@ -99,19 +104,19 @@ public class FillTables {
             Movie m;
             while (lit.hasNext()) {
                 m = lit.next();
-                pstmt.setString(1, m.getGenre());
+                pstmt.setInt(1, actorID);
+                pstmt.setString(2, m.getEmail());
 
                 // execute statement 
                 if (pstmt.executeUpdate() == 1) {
                     System.out.println(
-                            "Row for " + m.getGenre() + " has been added");
+                            "Row for " + m.getEmail() + " has been added");
                 }
-            } credentialsAdded = true;
+            }
         } catch (SQLException sqle) {
             System.out.println("Message: " + sqle.getMessage());
             System.out.println("Code: " + sqle.getSQLState());
         }
-        return credentialsAdded;
     }
 
     /**

@@ -13,7 +13,7 @@
         <h:form>
             <br>
             <center>
-                <h:outputText value="1. Create Tables" /><br></br><br></br>
+                <b><h:outputText value="1. Create Tables" /><br></br><br></br></b>
                 <h:commandButton value="Invoke" action="#{restClient.testCreateTables()}" 
                                  rendered="#{restClient.tablesCreated == 0}" />
                 <h:outputText value="Tables have been successfully created and filled (Status: 200). "
@@ -26,7 +26,7 @@
         <h:form>
             <br>
             <center>
-                <h:outputText value="2. One-to-One Query" /><br></br><br></br>
+                <b><h:outputText value="2. One-to-One Query" /><br></br><br></br></b>
                 <h:commandButton value="Invoke" />
             </center>
             </br><br></br>
@@ -34,7 +34,9 @@
         <h:form>
             <br>
             <center>
-                <h:outputText value="3/4. One-to-Many Query AND Many-to-Many Query "/>
+                <b><h:outputText value="3/4. One-to-Many Query AND Many-to-Many Query "/></b>
+                <br></br><br></br>
+                <h:outputText value="Search movie databse by Genre. "/>
                 <br></br><br></br>
                 <h:selectOneMenu value="#{restClient.genre}">
                     <f:selectItem itemValue="Action" itemLabel="Action" />
@@ -58,18 +60,34 @@
         <h:form>
             <br>
             <center>
-                <h:outputText value="5. Add an entry to a table with a One-to-One relationship" />
+                <b><h:outputText value="5. Add an entry to a table with a One-to-One relationship" /></b>
                 <br></br><br></br>
-                <h:commandButton value="Invoke"  />
+                <h:commandButton value="Invoke" action="#{restClient.testAddActor('Tom', 'Hardy')}" />
             </center>
             </br>
 	</h:form>
         <h:form>
             <br>
             <center>
-                <h:outputText value="6/7. Add an entry to a table with a One-to-Many relationship"/>
-                <br></br>
-                <h:outputText value="AND to a table with a Many-to-Many relationship" />
+                <b><h:outputText value="6. Add an entry to a table with a One-to-Many relationship"/></b>
+                <br></br><br></br>
+                <h:commandButton value="Invoke" action="#{restClient.testAddMovie('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
+                                                             154, 1994, 10, 14, 'https://youtu.be/s7EdQ4FqbhY',
+                                                             'Quentin', 'Tarantino', 'Crime')}" 
+                                 rendered="#{restClient.movieAdded == 0}"/>
+                <h:outputText value="Movie 'Pulp Fiction' (Crime) has been successfully added (Status: 200). "
+                             rendered="#{restClient.movieAdded == 1}" /><br></br><br></br>
+                <h:outputText value="Invoke step 3/4 to view result! "
+                             rendered="#{restClient.movieAdded == 1}" />
+                <h:outputText value="Movie was not added, please restart and try again! (Status: 204). "
+                             rendered="#{restClient.movieAdded == 2}" />
+            </center>
+            </br>
+	</h:form>
+        <h:form>
+            <br>
+            <center>
+                <b><h:outputText value="7. Add an entry to a table with a Many-to-Many relationship" /></b>
                 <br></br><br></br>
                 <h:commandButton value="Invoke"  />
             </center>
@@ -147,16 +165,6 @@
             <center>
                 <h:commandButton value="Search by Genre" 
                                  action="#{restClient.testGetMovieByGenre()}" />
-            </center>
-            </br>
-	</h:form>
-        
-        <h:form>
-            <br>
-            <center>
-                <h:commandButton value="Add movie" action="#{restClient.testAddMovie('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
-                                                             154, 1994, 10, 14, 'https://youtu.be/s7EdQ4FqbhY',
-                                                             'Quentin', 'Tarantino', 'Crime')}" />
             </center>
             </br>
 	</h:form>

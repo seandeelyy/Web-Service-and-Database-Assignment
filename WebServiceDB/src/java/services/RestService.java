@@ -97,7 +97,7 @@ public class RestService extends Application {
     @Path("/test")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String addMovie(@FormParam("title") String title,
+    public Response addMovie(@FormParam("title") String title,
             @FormParam("description") String description,
             @FormParam("runTime") int runTime,
             @FormParam("year") int year,
@@ -109,9 +109,33 @@ public class RestService extends Application {
             @FormParam("genre") String genre,
             @Context HttpServletResponse servletResponse) throws IOException{
         
-        insertData.fillMoviesTable(title, description, runTime, year, month, 
-                day, trailer, directorFirstName, directorLastName, genre);
-        return "";
+        if (insertData.addMovie(title, description, runTime, year, month, 
+                day, trailer, directorFirstName, directorLastName, genre)) {
+            System.out.println(Response.ok().build());
+            return Response.ok().build();
+        }
+        else {
+            System.out.println(Response.noContent().build());
+             return Response.noContent().build();
+        }
+    }
+    
+    @PUT
+    @Path("/addActor")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response addActor(
+            @FormParam("actorFirstName") String actorFirstName,
+            @FormParam("actorLastName") String actorLastName,
+            @Context HttpServletResponse servletResponse) throws IOException{
+        if (insertData.addActor(actorFirstName, actorLastName)) {
+            System.out.println(Response.ok().build());
+            return Response.ok().build();
+        }
+        else {
+            System.out.println(Response.noContent().build());
+             return Response.noContent().build();
+        }
     }
    
    
@@ -131,8 +155,9 @@ public class RestService extends Application {
     public Response createTable() {
         
         if (createTables.createActorsTable() &&
-            fillTables.fillActorsTable() &&
-//            createTables.createActorCredentialsTable() &&
+            
+            createTables.createActorCredentialsTable() &&
+                fillTables.fillActorsTable() &&
 //            fillTables.fillActorCredentialsTable() &&
             createTables.createDirectorsTable() &&
             fillTables.fillDirectorsTable() &&

@@ -30,6 +30,7 @@ public class RestClient {
     
     private String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService/movies";
     private int tablesCreated;
+    private int movieAdded;
     private int uid;
     private String actorName;
     private String genre;
@@ -227,7 +228,7 @@ public class RestClient {
         return "index";
     }
     
-    // Added a movie to the database
+    // Adds a movie to the database
     // @PUT
     public String testAddMovie(String title, String description, int runTime,
             int year, int month, int day, String trailer, String directorFirstName, 
@@ -246,10 +247,45 @@ public class RestClient {
         form.param("directorLastName", directorLastName);
         form.param("genre", genre);
 
-        String callResult = client
+        Response callResult = client
                 .target("http://localhost:8080/WebServiceDB/services/MyRestService/test").request(MediaType.APPLICATION_XML)
                 .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
-                String.class);
+                Response.class);
+        
+        if(callResult.getStatus() == 200) {
+            movieAdded = 1;
+            System.out.println(callResult.getStatus());
+        }
+        else {
+            System.out.println(callResult.getStatus());
+            movieAdded = 2;
+        }
+      
+        return "index";
+    }
+    
+    // Adds a movie to the database
+    // @PUT
+    public String testAddActor(String actorFirstName, String actorLastName){
+        Client client = ClientBuilder.newClient();
+        
+        Form form = new Form();
+        form.param("actorFirstName", actorFirstName);
+        form.param("actorLastName", actorLastName);
+        
+        Response callResult = client
+                .target("http://localhost:8080/WebServiceDB/services/MyRestService/addActor").request(MediaType.APPLICATION_XML)
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE), 
+                Response.class);
+        
+//        if(callResult.getStatus() == 200) {
+//            movieAdded = 1;
+//            System.out.println(callResult.getStatus());
+//        }
+//        else {
+//            System.out.println(callResult.getStatus());
+//            movieAdded = 2;
+//        }
       
         return "index";
     }
@@ -274,6 +310,16 @@ public class RestClient {
     public void setTablesCreated(int tablesCreated) {
         this.tablesCreated = tablesCreated;
     }
+
+    public int getMovieAdded() {
+        return movieAdded;
+    }
+
+    public void setMovieAdded(int movieAdded) {
+        this.movieAdded = movieAdded;
+    }
+    
+    
     
     public int getUid() {
         return uid;
