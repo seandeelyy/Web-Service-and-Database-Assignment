@@ -52,6 +52,7 @@ public class Movie {
      * @param description Movie description
      * @param runTime Duration of movie in minutes
      * @param releaseDate Date of movie release 
+     * @param trailer Link to movie trailer
      * @param actorID ID of actor
      * @param firstName First name of actor or director
      * @param lastName Last name of actor or director
@@ -93,6 +94,8 @@ public class Movie {
      * @param actorID ID of actor
      * @param firstName First name of actor
      * @param lastName Last name of actor
+     * @param DOB Date of birth of actor as a String
+     * @param email Email address of actor
      * @param image picture of actor
      * @param movieNames Movies which actor has appeared in.
      */
@@ -110,8 +113,9 @@ public class Movie {
     
     /**
      * Creates a Movie (actor) object with given information
-     * @param firstName First name of actor
-     * @param lastName Last name of actor
+     * @param actorID ID of actor
+     * @param dateOfBirth Date of birth of actor as DATE
+     * @param email Email address of actor
      * @param image picture of actor
      */
     public Movie(int actorID, LocalDate dateOfBirth, String email, String image) {
@@ -186,8 +190,6 @@ public class Movie {
         this.genreID = genreID;
     }
     
-    
-    // probably not needed
     /**
      * Creates a Movie (movie) object with given information
      * @param movieID ID of movie
@@ -209,7 +211,6 @@ public class Movie {
         this.genreID = genreID;
     }
     
-    // probably not needed
     /**
      * Creates a Movie (movie) object with given information
      * @param movieID ID of movie
@@ -533,19 +534,39 @@ public class Movie {
     public void setImage(String image) {
         this.image = image;
     }
-
+    
+    /**
+     * Get the value of dateOfBirth
+     * 
+     * @return the value of dateOfBirth
+     */
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
-
+    
+    /**
+     * Set the value of dateOfBirth
+     * 
+     * @param dateOfBirth new value of dateOfBirth
+     */
     public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
+    /**
+     * Get the value of DOB
+     * 
+     * @return the value of DOB
+     */
     public String getDOB() {
         return DOB;
     }
-
+    
+    /**
+     * Set the value ofDOB
+     * 
+     * @param DOB new value of DOB
+     */
     public void setDOB(String DOB) {
         this.DOB = DOB;
     }

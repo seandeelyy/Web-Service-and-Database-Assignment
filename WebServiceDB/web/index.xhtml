@@ -11,14 +11,16 @@
 
         <h1>Welcome User!</h1>
         <h:form>
-            <br>
+            <br></br><br>
             <center>
-                <b><h:outputText value="1. Create Tables" /><br></br><br></br></b>
+                <b><h:outputText value="1. Create Tables" style="font-size: 16px"/><br></br><br></br></b>
                 <h:commandButton value="Invoke" action="#{restClient.testCreateTables()}" 
                                  rendered="#{restClient.tablesCreated == 0}" />
                 <h:outputText value="Tables have been successfully created and filled (Status: 200). "
                              rendered="#{restClient.tablesCreated == 1}" />
                 <h:outputText value="Tables have NOT been created and filled (Status: 204). "
+                             rendered="#{restClient.tablesCreated == 2}" /><br></br>
+                <h:outputText value="Make sure they don't already exist! "
                              rendered="#{restClient.tablesCreated == 2}" />
             </center>
             </br><br></br>
@@ -26,7 +28,7 @@
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="2. One-to-One Query" /></b>
+                <b><h:outputText value="2. One-to-One Query" style="font-size: 16px"/></b>
                 <br></br><br></br>
                 <h:outputText value="Get information about an Actor. "/>
                 <br></br><br></br>
@@ -40,14 +42,14 @@
                     <f:selectItem itemValue="John Travolta" itemLabel="John Travolta" />
                 </h:selectOneMenu>
                 <br></br><br></br>
-                <h:commandButton value="Invoke" action="#{restClient.testGetActor(null, false)}" />
+                <h:commandButton value="Invoke" action="#{restClient.testGetActorByName(null, false)}" />
             </center>
             </br><br></br>
 	</h:form>
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="3/4. One-to-Many Query AND Many-to-Many Query "/></b>
+                <b><h:outputText value="3/4. One-to-Many Query AND Many-to-Many Query" style="font-size: 16px"/></b>
                 <br></br><br></br>
                 <h:outputText value="Search movie databse by Genre. "/>
                 <br></br><br></br>
@@ -73,57 +75,77 @@
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="5. Add an entry to a table with a One-to-One relationship" /></b>
+                <b><h:outputText value="5. Add an entry to a table with a One-to-One relationship" style="font-size: 16px"/></b>
                 <br></br><br></br>
                 <h:outputText value="This will add 'John Travolta' to the 'Actors' table AND "/><br></br>
                 <h:outputText value="add his credentials to the 'ActorCredentials' table. "/><br></br><br></br>
-                <h:outputText value="Before doing so, first search the database for 'John Travolta'"/><br></br>
-                <h:outputText value="by invoking Step 2 to ensure he doesn't already exist. "/><br></br><br></br>
-                <h:outputText value="Then invoke this step."/><br></br>
-                <br></br><br></br>
                 <h:commandButton value="Invoke" action="#{restClient.testAddActor('John', 'Travolta', 1954,
                                                           1, 18, 'john@travolta.com', 'John Travolta.png')}" 
-                                 rendered="#{restClient.actorAdded == false}" />
+                                 rendered="#{restClient.actorAdded == 0}" />
                  <h:outputText value="Actor 'John Travolta' has been successfully added (Status: 200). "
-                             rendered="#{restClient.actorAdded == true}" /><br></br><br></br>
-                 <h:outputText value="Re-Invoke Step 2 to verify that he has been added! "
-                             rendered="#{restClient.actorAdded == true}" /><br></br><br></br>
+                             rendered="#{restClient.actorAdded == 1}" /><br></br>
+                 <h:outputText value="Re-Invoke Step 2 to verify that he has been added! (Notice that Movies is blank)"
+                             rendered="#{restClient.actorAdded == 1}" />
+                  <h:outputText value="Actor 'John Travolta' was NOT added (Status: 204).  "
+                             rendered="#{restClient.actorAdded == 2}" /><br></br>
+                  <h:outputText value="Please make sure that he doesn't already exist! (Step 2) "
+                                rendered="#{restClient.actorAdded == 2}"/><br></br><br></br>
             </center>
             </br>
 	</h:form>
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="6. Add an entry to a table with a One-to-Many relationship"/></b>
+                <b><h:outputText value="6. Add an entry to a table with a One-to-Many relationship" style="font-size: 16px"/></b>
+                <br></br><br></br>
+                <h:outputText value="This will add 'Pulp Fiction' to the 'Movies' table."/>
                 <br></br><br></br>
                 <h:commandButton value="Invoke" action="#{restClient.testAddMovie('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
                                                              154, 1994, 10, 14, 'https://youtu.be/s7EdQ4FqbhY',
                                                              'Quentin', 'Tarantino', 'Crime')}" 
                                  rendered="#{restClient.movieAdded == 0}"/>
                 <h:outputText value="Movie 'Pulp Fiction' (Crime) has been successfully added (Status: 200). "
-                             rendered="#{restClient.movieAdded == 1}" /><br></br><br></br>
+                             rendered="#{restClient.movieAdded == 1}" /><br></br>
                 <h:outputText value="Invoke step 3/4 to verify result! (Notice that Actors is blank) "
                              rendered="#{restClient.movieAdded == 1}" />
-                <h:outputText value="Movie was not added, please restart and try again! (Status: 204). "
-                             rendered="#{restClient.movieAdded == 2}" />
+                 <h:outputText value="Movie 'Pulp Fiction' was NOT added (Status: 204).  "
+                             rendered="#{restClient.actorAdded == 2}" /><br></br>
+                  <h:outputText value="Please make sure that it doesn't already exist! (Step 3/4) "
+                                rendered="#{restClient.actorAdded == 2}"/><br></br><br></br>
             </center>
             </br>
 	</h:form>
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="7. Add an entry to a table with a Many-to-Many relationship" /></b>
+                <b><h:outputText value="7. Add an entry to a table with a Many-to-Many relationship" style="font-size: 16px"/></b>
                 <br></br><br></br>
-                <h:commandButton value="Invoke" action="#{restClient.testAddBoth('John', 'Travolta', 'Pulp Fiction')}" />
+                <h:outputText value="This will add the Actor ID of 'John Travolta' and the Movie ID "/><br></br>
+                <h:outputText value="of 'Pulp Fiction' to the 'Actors_Movies' bridge table. "/>
+                <br></br><br></br>
+                <h:commandButton value="Invoke" action="#{restClient.testAddActors_Movies
+                                                          ('John', 'Travolta', 'Pulp Fiction')}" 
+                                 rendered="#{restClient.actors_MoviesAdded != 1}"/>
+                <h:outputText value="An entry to the 'Actors_Movies' tables has been made (Status: 200)." 
+                              rendered="#{restClient.actors_MoviesAdded == 1}" /><br></br><br></br>
+                <h:outputText value="Invoke step 3/4 to verify result! (Notice that Actors is now filled) "
+                              rendered="#{restClient.actors_MoviesAdded == 1}"/>
+                <h:outputText value="Adding an entry to the 'Actors_Movies' tables FAILED (Status: 204)." 
+                              rendered="#{restClient.actors_MoviesAdded == 2}" /><br></br>
+                <h:outputText value="Please ensure that steps 5 and 6 have been invoked first!" 
+                              rendered="#{restClient.actors_MoviesAdded == 2}" /><br></br><br></br>
             </center>
             </br>
 	</h:form>
         <h:form>
             <br>
             <center>
-                <b><h:outputText value="8. Delete/Drop Tables (Optional)." /></b>
+                <b><h:outputText value="8. Delete/Drop Tables (Optional)." style="font-size: 16px"/></b>
                 <br></br><br></br>
-                <h:commandButton value="Invoke" action="#{restClient.testDeleteTables()}" />
+                <h:commandButton value="Invoke" action="#{restClient.testDeleteTables()}" 
+                                 rendered="#{restClient.tablesNotDeleted != true}" /><br></br>
+                <h:outputText value="Please ensure that tables aren't already deleted!" 
+                              rendered="#{restClient.tablesNotDeleted == true}" /><br></br><br></br>
             </center>
             </br>
 	</h:form>

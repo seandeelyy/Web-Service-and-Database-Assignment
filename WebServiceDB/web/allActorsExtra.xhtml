@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/extraServicesTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+        
+        <h:form>
+            <h:dataTable value="#{restClientExtraServices.actors}" var="actor" class="center_content"
+                         width='600' cellspacing="10" columnClasses="odd-col,even-col" 
+                         rendered="#{not empty restClientExtraServices.actors}" >
+                <h:column >
+                    <h:graphicImage name="#{actor.image}" library="images" width="250" height="250"
+                                    rendered="#{!empty actor.image}" />
+                    <h:graphicImage name="icon.png" library="images" width="250" height="250"
+                                    rendered="#{empty actor.image}" />
+                </h:column>
+                <h:column>
+                    <div class="row"><b>#{actor.firstName} #{actor.lastName} </b></div>
+                    <div class="row">Actor ID: #{actor.actorID}</div>
+                    <div class="row">Born: #{actor.DOB}</div>
+                    <div class="row"> Movies: 
+                        <ui:repeat value="#{actor.movieNames}" var="name">
+                            <h:commandLink value="#{name}" action="#{restClientExtraServices.testGetMovieByTitle(name, true)}"/>
+                            <h:outputText value=", " rendered="#{actor.movieNames[actor.movieNames.size() - 1] != name}"/>
+                        </ui:repeat> 
+                    </div>
+                    <div class="row">Contact Info: #{actor.email}</div>
+                </h:column>
+            </h:dataTable>
+            <br></br>
+            <center>
+                <h:outputText value="Actor #{restClientExtraServices.actorName} 
+                              does not exist in this database! Try again or go to step 5!" 
+                              rendered="#{empty restClientExtraServices.actors}" />
+            </center>
+            <br></br>
+            <center>
+                <h:commandButton value="Back" action="extraServices" />
+            </center>
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>

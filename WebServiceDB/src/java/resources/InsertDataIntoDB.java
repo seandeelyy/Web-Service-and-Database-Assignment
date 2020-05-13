@@ -14,11 +14,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-import resources.User;
-import resources.GetDataFromDB;
 
 /**
  *
@@ -343,16 +338,29 @@ public class InsertDataIntoDB {
             }
     }
     
-    public void AddToActors_MoviesTable(String actorFirstName, 
+    /**
+     * This function adds to the bridge table 'Actors_Movies' if BOTH the
+     * requested actor and movie already exist in their respective tables, i.e.
+     * if the actor already exists in the 'Actors' table and if the movie 
+     * already exists in the 'Movies' table.
+     * @param actorFirstName First name of actor
+     * @param actorLastName Last name of actor
+     * @param movieTitle Title of movie
+     * @return True if an entry was made, false otherwise
+     */
+    public boolean addToActors_MoviesTable(String actorFirstName, 
             String actorLastName, String movieTitle) {
         
-        actor = checkIfActorExists(actorFirstName, actorLastName);
+        boolean entryAdded = false;
         
+        // Check if the Actor and Movie already exist in the database
+        actor = checkIfActorExists(actorFirstName, actorLastName);        
         movie = checkIfMovieExists(movieTitle);
         
-        
         if (actor == null && movie == null) {
-            System.out.println("NEITHER");
+            System.out.println("No record exists for actor '" + actorFirstName + " " + 
+                    actorLastName + "' and for movie '" + movieTitle + "', " + 
+                    "please add these to the database first.");  
             
         }
         else if (actor == null) {
@@ -365,12 +373,7 @@ public class InsertDataIntoDB {
                     "' exists in this database, please add this"
                             + " movie first!");
         }
-        else {
-            System.out.println("Actor ID:    " + actor.getActorID());
-            System.out.println("Actor Name:  " + actor.getFirstName() + " " + actor.getLastName());
-            System.out.println("Movie ID:    " + movie.getMovieID());
-            System.out.println("Movie Title: " + movie.getTitle());
-            
+        else {            
             String sql = "INSERT INTO ACTORS_MOVIES(ACTORID, MOVIEID) "
                 + "VALUES(?,?)";
         
@@ -387,15 +390,13 @@ public class InsertDataIntoDB {
                                         actor.getLastName() + " & " +
                                         movie.getTitle() +                                    
                                         " has been added to the"
-                                        + " ACTORS_MOVIES table.");
-                    }
+                                        + " 'ACTORS_MOVIES' table.");
+                    } entryAdded = true;
             } catch (SQLException sqle) {
                 System.out.println("Message: " + sqle.getMessage());
                 System.out.println("Code: " + sqle.getSQLState());
             }
-            
         }
-        
-        
+        return entryAdded; 
     }
 }

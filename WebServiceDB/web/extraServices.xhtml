@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/templates/extraServicesTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="content">
+
+        <h1>Welcome User!</h1>
+        <h:form>
+            <br>
+            <center>
+                <br></br>
+                <b><h:outputText value="Get Started by creating the tables" style="font-size: 22px"/>
+                    <br></br><br></br></b>
+                <h:commandButton value="Create Tables" action="#{restClientExtraServices.testCreateTables()}" 
+                                 rendered="#{restClientExtraServices.tablesCreated == 0}" />
+                <h:outputText value="Tables have been successfully created and filled (Status: 200). "
+                             rendered="#{restClientExtraServices.tablesCreated == 1}" />
+                <h:outputText value="Tables have NOT been created and filled (Status: 204). "
+                             rendered="#{restClientExtraServices.tablesCreated == 2}" /><br></br>
+                <h:outputText value="Make sure they don't already exist! "
+                             rendered="#{restClientExtraServices.tablesCreated == 2}" />
+            </center>
+            </br><br></br>
+	</h:form>
+        <h:form rendered="#{restClientExtraServices.tablesCreated == 1}">
+            <br>
+            <center>
+                <b><h:outputText value="Browse Movies" style="font-size: 22px"/></b>
+                <br></br><br></br>
+                <h:commandButton value="All Movies" action="#{restClientExtraServices.testGetAllMovies()}" />
+                <br></br><br></br><br></br>
+                <h:outputText value="Search Movies By Title" />
+                <br></br><br></br>
+                <h:inputText value="#{restClientExtraServices.movieTitle}" 
+                              a:placeholder="Enter a Movie Title Here"/><br></br><br></br>
+                <h:commandButton value="Search" action="#{restClientExtraServices.testGetMovieByTitle(null, false)}" />
+                <br></br><br></br><br></br>
+                <h:outputText value="Search movie databse by Genre. "/>
+                <br></br><br></br>
+                <h:selectOneMenu value="#{restClientExtraServices.genre}">
+                    <f:selectItem itemValue="Action" itemLabel="Action" />
+                    <f:selectItem itemValue="Adventure" itemLabel="Adventure" />
+                    <f:selectItem itemValue="Comedy" itemLabel="Comedy" />
+                    <f:selectItem itemValue="Crime" itemLabel="Crime" />
+                    <f:selectItem itemValue="Documentary" itemLabel="Documentary" />
+                    <f:selectItem itemValue="Drama" itemLabel="Drama" />                
+                    <f:selectItem itemValue="Horror" itemLabel="Horror" />
+                    <f:selectItem itemValue="Musical" itemLabel="Musical" />
+                    <f:selectItem itemValue="Romance" itemLabel="Romance" />
+                    <f:selectItem itemValue="Romantic-Comedy" itemLabel="Romantic-Comedy" />                
+                    <f:selectItem itemValue="Sci-Fi" itemLabel="Sci-Fi" />
+                    <f:selectItem itemValue="Thriller" itemLabel="Thriller" />
+                </h:selectOneMenu>
+                <br></br><br></br>
+                <h:commandButton value="Invoke"  action="#{restClientExtraServices.testGetMovieByGenre()}"/>
+            </center>
+            </br><br></br>
+	</h:form>
+        <h:form rendered="#{restClientExtraServices.tablesCreated == 1}">
+            <br>
+            <center>
+                <b><h:outputText value="Browse Actors" style="font-size: 22px"/></b>
+                <br></br><br></br>
+                <h:commandButton value="All Actors" action="#{restClientExtraServices.testGetAllActors()}" />
+                <br></br><br></br><br></br>
+                <h:outputText value="Search Actors By Name" />
+                <br></br><br></br>
+                <h:inputText value="#{restClientExtraServices.actorName}" 
+                              a:placeholder="Enter the name of an actor"/><br></br><br></br>
+                <h:commandButton value="Search" action="#{restClientExtraServices.testGetActorByName(null, false)}" />
+                <br></br><br></br><br></br>
+            </center>
+            </br><br></br>
+	</h:form>
+        <h:form rendered="#{restClientExtraServices.tablesCreated == 1}">
+            <br>
+            <center>
+                <b><h:outputText value="Browse Directors" style="font-size: 22px"/></b>
+                <br></br><br></br>
+                <h:commandButton value="All Directors" action="#{restClientExtraServices.testGetAllDirectors()}" />
+                <br></br><br></br><br></br>
+                <h:outputText value="Search Directors By Name" />
+                <br></br><br></br>
+                <h:inputText value="#{restClientExtraServices.directorName}" 
+                              a:placeholder="Enter the name of a director"/><br></br><br></br>
+                <h:commandButton value="Search" action="#{restClientExtraServices.testGetDirectorByName(null, false)}" />
+                <br></br><br></br><br></br>
+            </center>
+            </br><br></br>
+	</h:form>
+        
+    </ui:define>
+
+</ui:composition>

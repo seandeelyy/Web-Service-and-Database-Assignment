@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
  */
 @ApplicationScoped
 @ManagedBean
-public class RestClient {
+public class RestClientExtraServices {
     
     private final String REST_SERVICE_URL = "http://localhost:8080/WebServiceDB/services/MyRestService";
     private int tablesCreated;
@@ -57,7 +57,7 @@ public class RestClient {
                 Response.class);
         tablesCreated = (callResult.getStatus() == 200) ? 1 : 2;
         
-        return "index";
+        return "extraServices";
     }
     
     /**
@@ -76,7 +76,7 @@ public class RestClient {
         actors = client.target(REST_SERVICE_URL).path("/actors/{actorname}")
                 .resolveTemplate("actorname", actorName).request().get(list);
         
-        return "allActors";
+        return "allActorsExtra";
     }
     
     /**
@@ -93,136 +93,9 @@ public class RestClient {
         movies = client.target(REST_SERVICE_URL).path("/movies/genre/{genre}")
                 .resolveTemplate("genre", genre).request().get(list);
         
-        return "allMovies";
+        return "allMoviesExtra";
     }
     
-    /**
-     * 5. Add an entry to a table with a One-to-One relationship
-     * This inserts an actor, 'John Travolta' in this case, into the 'Actors'
-     * table and adds his credentials to the 'ActorCredentials' table using @PUT.
-     * @param actorFirstName First name of actor to add
-     * @param actorLastName Last name of actor to add
-     * @param year Year actor was born
-     * @param month Month actor was born
-     * @param day Day actor was born
-     * @param actorEmail Email address of actor.
-     * @param actorImage Image of actor.
-     * @return Home page "index.xhtml" where a message will be displayed 
-     * indicating whether or not the actor was sucessfully added or not.
-     */
-    public String testAddActor(String actorFirstName, String actorLastName,
-            int year, int month, int day, String actorEmail, String actorImage){
-        Client client = ClientBuilder.newClient();
-        
-        Form form = new Form();
-        form.param("actorFirstName", actorFirstName);
-        form.param("actorLastName", actorLastName);
-        form.param("year", Integer.toString(year));
-        form.param("month", Integer.toString(month));
-        form.param("day", Integer.toString(day));
-        form.param("actorEmail", actorEmail);
-        form.param("actorImage", actorImage);
-        
-        Response callResult = client
-                .target(REST_SERVICE_URL).path("/actors/addActor")
-                .request(MediaType.APPLICATION_XML).put(Entity.entity(form, 
-                        MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);        
-        actorAdded = (callResult.getStatus() == 200) ? 1 : 2;
-      
-        return "index";
-    }
-    
-    /**
-     * 6. Add an entry to a table with a One-to-Many relationship
-     * This inserts the movie 'Pulp Fiction' into the 'Movies' table and also
-     * retrieves the Director ID (One-to-Many) of the Director from the 
-     * 'Directors' table AND retrieves the Genre ID (One-to-Many) of the Genre 
-     * from the 'Genres' table using @PUT.
-     * @param title Title of Movie to add to database
-     * @param description Description of movie to add.
-     * @param runTime Running time of the movie in minutes
-     * @param year Year the movie was released
-     * @param month Month the movie was released
-     * @param day Day the movie was released
-     * @param trailer Link to movie trailer
-     * @param directorFirstName First name of movie Director
-     * @param directorLastName Last name of movie Director
-     * @param genre Genre of movie as a String.
-     * @return Home page "index.xhtml" where a message will be displayed 
-     * indicating whether or not the movie was sucessfully added or not.
-     */ 
-    public String testAddMovie(String title, String description, int runTime,
-            int year, int month, int day, String trailer, String directorFirstName, 
-            String directorLastName, String genre){
-        Client client = ClientBuilder.newClient();
-        
-        Form form = new Form();
-        form.param("title", title);
-        form.param("description", description);
-        form.param("runTime", Integer.toString(runTime));
-        form.param("year", Integer.toString(year));
-        form.param("month", Integer.toString(month));
-        form.param("day", Integer.toString(day));
-        form.param("trailer", trailer);
-        form.param("directorFirstName", directorFirstName);
-        form.param("directorLastName", directorLastName);
-        form.param("genre", genre);
-
-        Response callResult = client
-                .target(REST_SERVICE_URL).path("/movies/addMovie")
-                .request(MediaType.APPLICATION_XML).put(Entity.entity(form, 
-                        MediaType.APPLICATION_FORM_URLENCODED_TYPE),Response.class);        
-        movieAdded = (callResult.getStatus() == 200) ? 1 : 2;
-      
-        return "index";
-    }
-    
-    /**
-     * 7. Add an entry to a table with a Many-to-Many relationship
-     * This inserts an Actors ID and a Movies ID into the 'Actors_Movies' bridge
-     * table (Many-to-Many) IF the Actor and Movie already exist in the database.
-     * @param actorFirstName First name of Actor who is to be added
-     * @param actorLastName Last name of Actor who is to be added
-     * @param title Title of Movie to be added
-     * @return Home page "index.xhtml" where a message will be displayed 
-     * indicating whether or not the operation was successful or not.
-     */
-    public String testAddActors_Movies(String actorFirstName, String actorLastName,
-            String title){
-        Client client = ClientBuilder.newClient();
-        Form form = new Form();
-        form.param("actorFirstName", actorFirstName);
-        form.param("actorLastName", actorLastName);
-        form.param("title", title);
-        
-        Response callResult = client
-                .target(REST_SERVICE_URL).path("/actors/movies/addActors_Movies")
-                .request(MediaType.APPLICATION_XML).put(Entity.entity(form, 
-                        MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);
-        Actors_MoviesAdded = (callResult.getStatus() == 200) ? 1 : 2;
-      
-        return "index";
-    }
-
-    /**
-     * 8. Delete/Drop Tables
-     * This will delete the tables which were created in step 1 using @DELETE
-     * @return Goodbye page 'tablesDeleted.xhtml' if tables are deleted
-     */
-    public String testDeleteTables() {
-        Client client = ClientBuilder.newClient();
-      
-        Response callResult = client
-                .target(REST_SERVICE_URL).path("/tables/delete")
-                .request(MediaType.APPLICATION_XML).delete(Response.class);
-        if(callResult.getStatus() == 200) {
-            return "tablesDeleted";
-        }
-        else {
-            tablesNotDeleted = true;
-            return "index";
-        }
-    }
     
     // *************************************************************************
     // The following are EXTRA web services which can be invoked by running
@@ -240,7 +113,7 @@ public class RestClient {
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};        
         actors = client.target(REST_SERVICE_URL).path("/actors")
                 .request().get(list);
-        return "allActors";
+        return "allActorsExtra";
     }
     
     /**
@@ -264,7 +137,7 @@ public class RestClient {
         
         directors = client.target(REST_SERVICE_URL).path("/directors")
                 .request().get(list);
-        return "allDirectors";
+        return "allDirectorsExtra";
     }
     
     /**
@@ -287,7 +160,7 @@ public class RestClient {
         Client client = ClientBuilder.newClient();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
         movies = client.target(REST_SERVICE_URL).path("/movies").request().get(list);
-        return "allMovies";
+        return "allMoviesExtra";
     }
     
     /**
@@ -313,7 +186,7 @@ public class RestClient {
         actors = client.target(REST_SERVICE_URL).path("/actor/{actorid}")
                 .resolveTemplate("actorid", actorID).request().get(list);
         
-        return "allActors";
+        return "allActorsExtra";
     }
     
     /**
@@ -332,7 +205,7 @@ public class RestClient {
         directors = client.target(REST_SERVICE_URL).path("/directors/{directorname}")
                 .resolveTemplate("directorname", directorName).request().get(list);
 
-        return "allDirectors";
+        return "allDirectorsExtra";
     }
     
     /**
@@ -343,7 +216,7 @@ public class RestClient {
      * @return 'allDirectors.xhtml' which will display the resulting information 
      * about any director(s) which were found
      */
-    public String testGetDirectorByName(int passedDirectorID, boolean flag){
+    public String testGetDirectorByID(int passedDirectorID, boolean flag){
         Client client = ClientBuilder.newClient();
         directors = new ArrayList<>();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
@@ -351,7 +224,7 @@ public class RestClient {
         directors = client.target(REST_SERVICE_URL).path("/director/{directorid}")
                 .resolveTemplate("directorid", directorID).request().get(list);
 
-        return "allDirectors";
+        return "allDirectorsExtra";
     }
     
     /**
@@ -369,7 +242,7 @@ public class RestClient {
         movies = client.target(REST_SERVICE_URL).path("/movies/{title}")
                 .resolveTemplate("title", movieTitle).request().get(list);
         
-        return "allMovies";
+        return "allMoviesExtra";
     }
     
     /**
@@ -570,5 +443,5 @@ public class RestClient {
     public void setActors_MoviesAdded(int Actors_MoviesAdded) {
         this.Actors_MoviesAdded = Actors_MoviesAdded;
     }
-
+    
 }
