@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="/templates/newTemplate.xhtml"
+<ui:composition template="/templates/extraServicesTemplate.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -10,8 +10,8 @@
     <ui:define name="content">
         
         <h:form>
-            <h:dataTable value="#{restClient.movies}" var="movie" class="center_content"
-                         border='1' width='600' cellpadding="5" rendered="#{not empty restClient.movies}">
+            <h:dataTable value="#{restClientExtraServices.movies}" var="movie" class="center_content"
+                         border='1' width='600' cellpadding="5" rendered="#{not empty restClientExtraServices.movies}">
                 <h:column>
                     <div class="first row" style="font-size: 32px">#{movie.title}</div>
                     <div class="row">#{movie.runningTime} | <b>#{movie.genre} </b>| #{movie.release} |
@@ -21,11 +21,11 @@
                     </div>
                     <div class="row-desc">#{movie.description}</div>
                     <div class="row">Director:
-                        <h:commandLink value="#{movie.directorFullName}" action="#{restClient.testGetDirectorByName(movie.directorFullName, true)}"/>
+                        <h:commandLink value="#{movie.directorFullName}" action="#{restClientExtraServices.testGetDirectorByName(movie.directorFullName, true)}"/>
                     </div>
                     <div class="row"> Actors: 
                         <ui:repeat value="#{movie.actorNames}" var="name">
-                            <h:commandLink value="#{name}" action="#{restClient.testGetActorByName(name, true)}"/>
+                            <h:commandLink value="#{name}" action="#{restClientExtraServices.testGetActorByName(name, true)}"/>
                             <h:outputText value=", " rendered="#{movie.actorNames[movie.actorNames.size() - 1] != name}"/>
                         </ui:repeat> 
                     </div>
@@ -33,12 +33,12 @@
             </h:dataTable>
             <br></br>
             <center>
-                <h:outputText value="No movies exist for the #{restClient.genre} genre! Try again!" 
-                              rendered="#{empty restClient.movies}" />
+                <h:outputText value="No movies exist for the #{restClientExtraServices.genre} genre! Try again!" 
+                              rendered="#{empty restClientExtraServices.movies}" />
             </center>
             <br></br>
             <center>
-                <h:commandButton value="Back" action="index" />
+                <h:commandButton value="Back" action="extraServices" />
             </center>
         </h:form>
         

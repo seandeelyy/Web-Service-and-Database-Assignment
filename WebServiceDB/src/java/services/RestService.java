@@ -6,7 +6,6 @@
 package services;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ApplicationPath;
@@ -19,15 +18,11 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import resources.SimpleObject;
-import resources.User;
 import resources.Movie;
-import resources.GetUserDataFromDB;
 import resources.GetDataFromDB;
 import resources.InsertDataIntoDB;
 import resources.CreateTables;
@@ -42,150 +37,18 @@ import resources.FillTables;
 @ApplicationPath("/services")
 public class RestService extends Application {
     
-    GetUserDataFromDB userData = new GetUserDataFromDB();
     GetDataFromDB movieData = new GetDataFromDB();
     InsertDataIntoDB insertData = new InsertDataIntoDB();
     CreateTables createTables = new CreateTables();
     FillTables fillTables = new FillTables();
     DeleteTables deleteTables = new DeleteTables();
     
-    // http://localhost:8080/WebServiceDB/services/MyRestService/users
-    
-    @GET
-    @Path("/users")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<User> getUsers() { 
-       return userData.getAllUsers();
-    }    
-
-    @GET
-    @Path("/users/{userid}")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public User getUser(@PathParam("userid") int userid) { 
-       return userData.getUser(userid);
-    }
-    
+    // 1. Create Tables
     @POST
-    @Path("/users")
+    @Path("/tables/create")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createUser(@FormParam("fname") String fname,      
-        @FormParam("sname") String lname,
-        @FormParam("type") String utype,
-        @Context HttpServletResponse servletResponse) throws IOException{
-      
-        System.out.println("First Name: " + fname);
-        System.out.println("Surname:    " + lname);
-        System.out.println("User Type:  " + utype);
-        
-        userData.addUser(fname, lname, utype);
-        
-        return Response.created(URI.create("/users/" + fname)).build();
-    }
-    
-    @PUT
-    @Path("/users")
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String updateUser(@FormParam("uid") int uid,
-            @FormParam("type") String type,
-            @Context HttpServletResponse servletResponse) throws IOException{
-
-        userData.editUser(uid, type);
-        return "";
-    }
-    
-    @PUT
-    @Path("/addMovie")
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response addMovie(@FormParam("title") String title,
-            @FormParam("description") String description,
-            @FormParam("runTime") int runTime,
-            @FormParam("year") int year,
-            @FormParam("month") int month,
-            @FormParam("day") int day,
-            @FormParam("trailer") String trailer,
-            @FormParam("directorFirstName") String directorFirstName,
-            @FormParam("directorLastName") String directorLastName,
-            @FormParam("genre") String genre,
-            @Context HttpServletResponse servletResponse) throws IOException{
-        
-        if (insertData.addMovie(title, description, runTime, year, month, 
-                day, trailer, directorFirstName, directorLastName, genre)) {
-            System.out.println(Response.ok().build());
-            return Response.ok().build();
-        }
-        else {
-            System.out.println(Response.noContent().build());
-             return Response.noContent().build();
-        }
-    }
-    
-    @PUT
-    @Path("/addActor")
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response addActor(
-            @FormParam("actorFirstName") String actorFirstName,
-            @FormParam("actorLastName") String actorLastName,
-            @FormParam("year") int year,
-            @FormParam("month") int month,
-            @FormParam("day") int day,
-            @FormParam("actorEmail") String actorEmail,
-            @FormParam("actorImage") String actorImage,
-            @Context HttpServletResponse servletResponse) throws IOException{
-        
-        if (insertData.addActor(actorFirstName, actorLastName, year, month, 
-                day, actorEmail, actorImage)) {
-            System.out.println(Response.ok().build());
-            return Response.ok().build();
-        }
-        else {
-            System.out.println(Response.noContent().build());
-             return Response.noContent().build();
-        }
-    }
-    
-    @PUT
-    @Path("/addBoth")
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String addtoActors_MoviesTable(
-            @FormParam("actorFirstName") String actorFirstName,
-            @FormParam("actorLastName") String actorLastName,
-            @FormParam("title") String title,
-            @Context HttpServletResponse servletResponse) throws IOException{
-        
-        insertData.AddToActors_MoviesTable(actorFirstName, actorLastName, title);
-        
-        return "";
-    }
-    
-    
-    @DELETE
-    @Path("/tables/delete")
-    @Produces(MediaType.APPLICATION_XML)
-    public Response deleteTables() {
-        if (deleteTables.deleteActorCredentialsTable() &&
-            deleteTables.deleteActorsTable() &&
-            deleteTables.deleteActors_MoviesTable() &&
-            deleteTables.deleteMoviesTable() &&
-            deleteTables.deleteDirectorsTable() &&
-            deleteTables.deleteGenresTable()) {
-            return Response.ok().build();
-        }
-        else {
-            return Response.noContent().build();
-        }
-    }
-    
-    @POST
-    @Path("/tables")
-    @Produces(MediaType.APPLICATION_XML)
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createTable() {
-        
+    public Response createTable() {        
         if (createTables.createActorsTable() &&
             fillTables.fillActorsTable() &&
             createTables.createActorCredentialsTable() &&
@@ -203,41 +66,9 @@ public class RestService extends Application {
         else {
              return Response.noContent().build();
         }
-    }  
+    } 
     
-    @GET
-    @Path("/movies")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getMovies() { 
-        ArrayList<Movie> movies = movieData.getAllMovies();
-        
-        for (Movie m : movies) {
-            System.out.println(m.getReleaseDate() + " " + m.getActorID()
-            + " " + m.getFirstName());
-        }
-        return movies;
-    }
-    
-    @GET
-    @Path("/movies/{title}")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getMovieByTitle(@PathParam("title") String title) { 
-       return movieData.getMovieByTitle(title);
-    }
-
-    @GET
-    @Path("/actors")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getActors() { 
-        ArrayList<Movie> actors = movieData.getAllActors();
-        
-        for (Movie a : actors) {
-            System.out.println(a.getActorID() + ": " + a.getFirstName()
-            + " " + a.getLastName());
-        }
-        return actors;
-    }
-    
+    // 2. One-to-One Query
     @GET
     @Path("/actors/{actorname}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -245,6 +76,139 @@ public class RestService extends Application {
        return movieData.getActorByName(actorname);
     }
     
+    // 3/4. One-to-Many Query AND Many-to-Many Query
+    @GET
+    @Path("movies/genre/{genre}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getMovieByGenre(@PathParam("genre") String genre) { 
+       return movieData.getMovieByGenre(genre);
+    }
+    
+    // 5. Add an entry to a table with a One-to-One relationship
+    @PUT
+    @Path("/actors/addActor")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response addActor(
+            @FormParam("actorFirstName") String actorFirstName,
+            @FormParam("actorLastName") String actorLastName,
+            @FormParam("year") int year,
+            @FormParam("month") int month,
+            @FormParam("day") int day,
+            @FormParam("actorEmail") String actorEmail,
+            @FormParam("actorImage") String actorImage,
+            @Context HttpServletResponse servletResponse) throws IOException{
+        
+        if (insertData.addActor(actorFirstName, actorLastName, year, month, 
+                day, actorEmail, actorImage)) {
+            return Response.ok().build();
+        }
+        else {
+             return Response.noContent().build();
+        }
+    }
+    
+    // 6. Add an entry to a table with a One-to-Many relationship
+    @PUT
+    @Path("/movies/addMovie")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response addMovie(@FormParam("title") String title,
+            @FormParam("description") String description,
+            @FormParam("runTime") int runTime,
+            @FormParam("year") int year,
+            @FormParam("month") int month,
+            @FormParam("day") int day,
+            @FormParam("trailer") String trailer,
+            @FormParam("directorFirstName") String directorFirstName,
+            @FormParam("directorLastName") String directorLastName,
+            @FormParam("genre") String genre,
+            @Context HttpServletResponse servletResponse) throws IOException{
+        if (insertData.addMovie(title, description, runTime, year, month, 
+                day, trailer, directorFirstName, directorLastName, genre)) {
+            return Response.ok().build();
+        }
+        else {
+             return Response.noContent().build();
+        }
+    }
+    
+    // 7. Add an entry to a table with a Many-to-Many relationship
+    @PUT
+    @Path("/actors/movies/addActors_Movies")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response addToActors_MoviesTable(
+            @FormParam("actorFirstName") String actorFirstName,
+            @FormParam("actorLastName") String actorLastName,
+            @FormParam("title") String title,
+            @Context HttpServletResponse servletResponse) throws IOException{
+        
+        if (insertData.addToActors_MoviesTable(actorFirstName,actorLastName, title)) {
+            return Response.ok().build();
+        }
+        else {
+            return Response.noContent().build();
+        }
+    }
+    
+    // 8. Delete/Drop Tables
+    @DELETE
+    @Path("/tables/delete")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response deleteTables() {
+        if (deleteTables.deleteActorCredentialsTable() &&
+            deleteTables.deleteActorsTable() &&
+            deleteTables.deleteActors_MoviesTable() &&
+            deleteTables.deleteMoviesTable() &&
+            deleteTables.deleteDirectorsTable() &&
+            deleteTables.deleteGenresTable()) {
+            return Response.ok().build();
+        }
+        else {
+            return Response.noContent().build();
+        }
+    } 
+    
+    // *************************************************************************
+    // The following are EXTRA web services which can be invoked by running
+    // 'extraServices.xhtml'
+    // *************************************************************************
+    
+    // Retrieve all actors from the database ('Actors' table) along with their
+    // credentials from the 'ActorCredentials' table and the movies in which they
+    // have featured in from the 'Actors_Movies' table.
+    @GET
+    @Path("/actors")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getActors() { 
+        ArrayList<Movie> actors = movieData.getAllActors();
+        return actors;
+    }
+    
+    // Retrieve all directors from the database ('Directors' table) along with 
+    // the name of any movies which they have directed ('Movies' table).
+    @GET
+    @Path("/directors")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getDirectors() { 
+        ArrayList<Movie> directors = movieData.getAllDirectors();
+        return directors;
+    }
+    
+    // Retrieve all movies from the database ('Movies' table) along with the 
+    // name of the director who directed it ('Directors' table), the name of 
+    // any actors who featured in it ('Actors_Movies' table) and the genre 
+    // of the movie itself from the 'Genres' table.
+    @GET
+    @Path("/movies")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public ArrayList<Movie> getMovies() { 
+        ArrayList<Movie> movies = movieData.getAllMovies();
+        return movies;
+    }
+    
+    // Retrieve an actor from the database, based on their actorID.
     @GET
     @Path("/actor/{actorid}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -252,26 +216,18 @@ public class RestService extends Application {
        return movieData.getActorByID(actorid);
     }
     
-    @GET
-    @Path("/directors")
-    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getDirectors() { 
-        ArrayList<Movie> directors = movieData.getAllDirectors();
-        
-        for (Movie d : directors) {
-            System.out.println(d.getDirectorID() + ": " + d.getFirstName()
-            + " " + d.getLastName());
-        }
-        return directors;
-    }
-    
+    // Return any directors from the 'Directors' table which match the passed
+    // parameter and also any movie which they may have directed from the 
+    // 'Movies' table.
     @GET
     @Path("/directors/{directorname}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getDirectorByName(@PathParam("directorname") String directorname) { 
+    public ArrayList<Movie> getDirectorByName(@PathParam("directorname") 
+            String directorname) { 
        return movieData.getDirectorByName(directorname);
     }
     
+    // Retrieve a director from the database, based on their directorID.
     @GET
     @Path("/director/{directorid}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -279,15 +235,16 @@ public class RestService extends Application {
        return movieData.getDirectorByID(directorid);
     }
     
+    // Return any movies from the 'Movies' table which match the passed 
+    // parameter along with the name of the director who directed it 
+    // ('Directors' table), the name of any actors who featured in it 
+    // ('Actors_Movies' table) and the genre of the movie itself from the 
+    // 'Genres' table.
     @GET
-    @Path("movies/genre/{genre}")
+    @Path("/movies/{title}")
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public ArrayList<Movie> getGenre(@PathParam("genre") String genre) { 
-        ArrayList<Movie> movies = movieData.getMovieByGenre(genre);
-        for (Movie m: movies) {
-            System.out.println(m.getTitle());
-        }
-       return movieData.getMovieByGenre(genre);
+    public ArrayList<Movie> getMovieByTitle(@PathParam("title") String title) { 
+       return movieData.getMovieByTitle(title);
     }
 
 }
