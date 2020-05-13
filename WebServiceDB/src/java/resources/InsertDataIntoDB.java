@@ -28,7 +28,7 @@ public class InsertDataIntoDB {
     private int directorID;
     GetDataFromDB getData = new GetDataFromDB();
     
-    private static final String URL = "jdbc:derby://localhost:1527/myDB";
+    private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
     private static final String PASSWD = "app";
     

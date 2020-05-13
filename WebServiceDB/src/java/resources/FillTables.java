@@ -7,7 +7,6 @@ package resources;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ListIterator;
@@ -19,7 +18,7 @@ import java.util.ListIterator;
  */
 public class FillTables {
     
-    private static final String URL = "jdbc:derby://localhost:1527/myDB";
+    private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
     private static final String PASSWD = "app";
 
