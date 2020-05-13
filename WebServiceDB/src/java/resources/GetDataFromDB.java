@@ -35,7 +35,7 @@ public class GetDataFromDB {
     private int actorID;
     private int movieID;
     
-    private static final String URL = "jdbc:derby://localhost:1527/myDB";
+    private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
     private static final String PASSWD = "app";
     

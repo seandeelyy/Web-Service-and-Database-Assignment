@@ -13,7 +13,7 @@ import java.sql.*;
  */
 public class CreateTables {
     
-    private static final String URL = "jdbc:derby://localhost:1527/myDB";
+    private static final String URL = "jdbc:derby://localhost:1527/sample";
     private static final String USER = "app";
     private static final String PASSWD = "app";
     
@@ -147,7 +147,7 @@ public class CreateTables {
         
         String sql = "CREATE TABLE MOVIES(ID INTEGER Primary Key "
                 + "GENERATED ALWAYS AS IDENTITY (START WITH 1000, INCREMENT BY 1), "
-                + "TITLE VARCHAR(255), DESCRIPTION VARCHAR(255), "
+                + "TITLE VARCHAR(255), DESCRIPTION VARCHAR(500), "
                 + "RUNTIME INTEGER, RELEASEDATE DATE, TRAILER VARCHAR(50),"
                 + "DIRECTOR INTEGER, GENRE INTEGER, FOREIGN KEY(DIRECTOR) "
                 + "REFERENCES DIRECTORS(ID), FOREIGN KEY(GENRE) REFERENCES GENRES(ID))";
