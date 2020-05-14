@@ -16,7 +16,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
@@ -48,7 +47,7 @@ public class RestService extends Application {
     @Path("/tables/create")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response createTable() {        
+    public Response createTables() {        
         if (createTables.createActorsTable() &&
             fillTables.fillActorsTable() &&
             createTables.createActorCredentialsTable() &&
@@ -61,6 +60,7 @@ public class RestService extends Application {
             fillTables.fillMoviesTable() &&
             createTables.createActors_MoviesTable() &&
             fillTables.fillActors_MoviesTable()) {
+            System.out.println(Response.ok().build());
             return Response.ok().build();
         }
         else {
@@ -85,7 +85,7 @@ public class RestService extends Application {
     }
     
     // 5. Add an entry to a table with a One-to-One relationship
-    @PUT
+    @POST
     @Path("/actors/addActor")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -109,7 +109,7 @@ public class RestService extends Application {
     }
     
     // 6. Add an entry to a table with a One-to-Many relationship
-    @PUT
+    @POST
     @Path("/movies/addMovie")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -134,7 +134,7 @@ public class RestService extends Application {
     }
     
     // 7. Add an entry to a table with a Many-to-Many relationship
-    @PUT
+    @POST
     @Path("/actors/movies/addActors_Movies")
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
