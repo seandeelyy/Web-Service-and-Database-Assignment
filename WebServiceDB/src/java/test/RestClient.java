@@ -99,7 +99,7 @@ public class RestClient {
     /**
      * 5. Add an entry to a table with a One-to-One relationship
      * This inserts an actor, 'John Travolta' in this case, into the 'Actors'
-     * table and adds his credentials to the 'ActorCredentials' table using @PUT.
+     * table and adds his credentials to the 'ActorCredentials' table using @POST.
      * @param actorFirstName First name of actor to add
      * @param actorLastName Last name of actor to add
      * @param year Year actor was born
@@ -125,7 +125,7 @@ public class RestClient {
         
         Response callResult = client
                 .target(REST_SERVICE_URL).path("/actors/addActor")
-                .request(MediaType.APPLICATION_XML).put(Entity.entity(form, 
+                .request(MediaType.APPLICATION_XML).post(Entity.entity(form, 
                         MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);        
         actorAdded = (callResult.getStatus() == 200) ? 1 : 2;
       
@@ -137,7 +137,7 @@ public class RestClient {
      * This inserts the movie 'Pulp Fiction' into the 'Movies' table and also
      * retrieves the Director ID (One-to-Many) of the Director from the 
      * 'Directors' table AND retrieves the Genre ID (One-to-Many) of the Genre 
-     * from the 'Genres' table using @PUT.
+     * from the 'Genres' table using @POST.
      * @param title Title of Movie to add to database
      * @param description Description of movie to add.
      * @param runTime Running time of the movie in minutes
@@ -170,7 +170,7 @@ public class RestClient {
 
         Response callResult = client
                 .target(REST_SERVICE_URL).path("/movies/addMovie")
-                .request(MediaType.APPLICATION_XML).put(Entity.entity(form, 
+                .request(MediaType.APPLICATION_XML).post(Entity.entity(form, 
                         MediaType.APPLICATION_FORM_URLENCODED_TYPE),Response.class);        
         movieAdded = (callResult.getStatus() == 200) ? 1 : 2;
       
@@ -197,7 +197,7 @@ public class RestClient {
         
         Response callResult = client
                 .target(REST_SERVICE_URL).path("/actors/movies/addActors_Movies")
-                .request(MediaType.APPLICATION_XML).put(Entity.entity(form, 
+                .request(MediaType.APPLICATION_XML).post(Entity.entity(form, 
                         MediaType.APPLICATION_FORM_URLENCODED_TYPE), Response.class);
         Actors_MoviesAdded = (callResult.getStatus() == 200) ? 1 : 2;
       
@@ -343,7 +343,7 @@ public class RestClient {
      * @return 'allDirectors.xhtml' which will display the resulting information 
      * about any director(s) which were found
      */
-    public String testGetDirectorByName(int passedDirectorID, boolean flag){
+    public String testGetDirectorByID(int passedDirectorID, boolean flag){
         Client client = ClientBuilder.newClient();
         directors = new ArrayList<>();
         GenericType<ArrayList<Movie>> list = new GenericType<ArrayList<Movie>>() {};
