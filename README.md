@@ -6,6 +6,7 @@ that interacts with a relational databse of your choosing via JDBC using a RESTf
 
 
 Commands Needed to Create Tables
+---
 
 Actors Table
 ---
